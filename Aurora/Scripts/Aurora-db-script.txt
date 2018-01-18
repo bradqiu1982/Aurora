@@ -1,0 +1,9 @@
+﻿
+CREATE TABLE [dbo].[UserCustomizeTheme](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[MachineName] [nvarchar](50) NOT NULL,
+	[Theme] [tinyint] NOT NULL,
+	[CreateTime] [datetime] NOT NULL,
+	[UpdateTime] [datetime] NOT NULL
+) ON [PRIMARY]
+
