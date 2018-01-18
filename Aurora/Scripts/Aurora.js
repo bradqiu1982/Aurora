@@ -9,7 +9,7 @@
         })
 
         $('body').on('click', '.maineditor-proj', function () {
-            alert('project');
+            $('#pjmodal').modal({ backdrop: 'static' });
         })
     }
 

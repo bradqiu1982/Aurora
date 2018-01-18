@@ -38,7 +38,10 @@ namespace Aurora.Controllers
         public ActionResult Home()
         {
             UserAuth();
-            ViewBag.EmployeeList = Newtonsoft.Json.JsonConvert.SerializeObject(CfgUtility.GetEmployeeList(this).ToArray());
+            var employlist = CfgUtility.GetEmployeeList(this);
+            ViewBag.EmployeeList = Newtonsoft.Json.JsonConvert.SerializeObject(employlist.ToArray());
+            var pjlist = CfgUtility.GetPJList(this);
+            ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
             return View();
         }
     }

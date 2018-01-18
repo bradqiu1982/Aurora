@@ -132,13 +132,21 @@
                 <div class="col-xs-3">
                     <label class="control-label">To Who</label>
                 </div>
-                <div class="col-xs-9">
+                <div class="col-xs-8">
                     <input class="form-control" id="choosepeople" name="choosepeople">
+                </div>
+                <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="pump2towhoinput2()"></span>
                 </div>
                 <script type="text/javascript">
                             function pump2towhoinput(choosed)
                             {
                                 $('#towhoinput1').val( $('#towhoinput1').val() + '@@' + choosed + ' ');
+                            }
+
+                            function pump2towhoinput2()
+                            {
+                                $('#towhoinput1').val( $('#towhoinput1').val() + '@@' + $('#choosepeople').val() + ' ');
                             }
                 </script>
             </div>
@@ -182,6 +190,82 @@
             },
             onSelect: function(event, term, item)	{
                 pump2towhoinput(term);
+            }
+
+        });
+    </script>
+</div>
+
+
+<div class="modal" id="pjmodal" style="margin-top:12%" tabindex="-1" role="dialog" aria-labelledby="pjmodalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pjmodalLabel">Choose Project</h4>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-xs-3">
+                    <label class="control-label">PJ List</label>
+                </div>
+                <div class="col-xs-8">
+                    <input class="form-control" id="choosepj" name="choosepj">
+                </div>
+                <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="pump2pjinput2()"></span>
+                </div>
+                <script type="text/javascript">
+                            function pump2pjinput(choosed)
+                            {
+                                $('#pjinput').val( $('#pjinput').val() + '#' + choosed + ' ');
+                            }
+                            
+                            function pump2pjinput2()
+                            {
+                                $('#pjinput').val( $('#pjinput').val() + '#' + $('#choosepj').val() + ' ');
+                            }
+                </script>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-xs-3">
+                    <label class="control-label">PJ Input</label>
+                </div>
+                <div class="col-xs-9" data-toggle="tooltip" data-placement="center" title="Exampel: #project1 #project2 #project3...">
+                    <textarea class="form-control col-xs-12" name="pjinput" id="pjinput" style="height:100px;min-width:300px;"></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" onclick="cancelchoosepj()">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="donechoosepj()">Done</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function donechoosepj()
+        {
+            $('#pjmodal').modal('hide');
+            var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#pjinput').val() + '</p>';
+            CKEDITOR.instances.JobTopicEditor.setData(wholeval);
+        }
+        function cancelchoosepj() {
+            $('#pjinput').val('');
+            $('#pjmodal').modal('hide');
+        }
+
+        $('#choosepj').autoComplete({
+            minChars: 0,
+            source: function (term, suggest) {
+                term = term.toLowerCase();
+                var choices = @Html.Raw(ViewBag.PJList);
+                var suggestions = [];
+                for (i = 0; i < choices.length; i++)
+                    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                suggest(suggestions);
+            },
+            onSelect: function(event, term, item)	{
+                pump2pjinput(term);
             }
 
         });

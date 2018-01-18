@@ -60,5 +60,33 @@ namespace Aurora.Models
             retlist.Sort();
             return retlist;
         }
+
+        public static List<string> GetPJList(Controller ctrl)
+        {
+            var lines = System.IO.File.ReadAllLines(ctrl.Server.MapPath("~/Scripts/AuroraCfg.txt"));
+            var ret = new Dictionary<string, string>();
+            foreach (var line in lines)
+            {
+                if (line.Contains("##"))
+                {
+                    continue;
+                }
+
+                if (line.Contains(":::"))
+                {
+                    var kvpair = line.Split(new string[] { ":::" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (!ret.ContainsKey(kvpair[1].Trim())
+                        && kvpair[0].Trim().ToUpper().Contains("PJNAME"))
+                    {
+                        ret.Add(kvpair[1].Trim(), kvpair[0].Trim());
+                    }
+                }//end if
+            }//end foreach
+
+            var retlist = new List<string>(ret.Keys);
+            retlist.Sort();
+            return retlist;
+        }
+
     }
 }
