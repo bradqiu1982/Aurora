@@ -31,7 +31,7 @@ namespace Aurora.Models
             return ret;
         }
 
-        public static List<string> GetEmployeeList(Controller ctrl)
+        public static Dictionary<string, string> GetEmployeeDict(Controller ctrl)
         {
             var lines = System.IO.File.ReadAllLines(ctrl.Server.MapPath("~/Scripts/AuroraCfg.txt"));
             var ret = new Dictionary<string, string>();
@@ -56,12 +56,19 @@ namespace Aurora.Models
                 }//end if
             }//end foreach
 
+            return ret;
+        }
+
+
+        public static List<string> GetEmployeeList(Controller ctrl)
+        {
+            var ret = GetEmployeeDict(ctrl);
             var retlist = new List<string>(ret.Keys);
             retlist.Sort();
             return retlist;
         }
 
-        public static List<string> GetPJList(Controller ctrl)
+        public static Dictionary<string, string> GetPJDict(Controller ctrl)
         {
             var lines = System.IO.File.ReadAllLines(ctrl.Server.MapPath("~/Scripts/AuroraCfg.txt"));
             var ret = new Dictionary<string, string>();
@@ -83,6 +90,12 @@ namespace Aurora.Models
                 }//end if
             }//end foreach
 
+            return ret;
+        }
+
+        public static List<string> GetPJList(Controller ctrl)
+        {
+            var ret = GetPJDict(ctrl);
             var retlist = new List<string>(ret.Keys);
             retlist.Sort();
             return retlist;

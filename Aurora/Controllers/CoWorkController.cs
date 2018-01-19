@@ -31,18 +31,112 @@ namespace Aurora.Controllers
             var glbcfg = CfgUtility.GetSysConfig(this);
             if (glbcfg.ContainsKey(ViewBag.compName))
             {
-                ViewBag.compName = glbcfg[ViewBag.compName].Trim().ToUpper();
+                ViewBag.username = glbcfg[ViewBag.compName].Trim().ToUpper();
+            }
+            else
+            {
+                ViewBag.username = ViewBag.compName;
             }
         }
+
         // GET: CoWork
         public ActionResult Home()
         {
             UserAuth();
-            var employlist = CfgUtility.GetEmployeeList(this);
+            var employlist = new List<string>();
+            employlist.AddRange(CoTopicVM.GetNewPeopleList());
+            employlist.AddRange(CfgUtility.GetEmployeeList(this));
             ViewBag.EmployeeList = Newtonsoft.Json.JsonConvert.SerializeObject(employlist.ToArray());
-            var pjlist = CfgUtility.GetPJList(this);
+
+            var pjlist = new List<string>();
+            pjlist.AddRange(CoTopicVM.GetNewPJList());
+            pjlist.AddRange(CfgUtility.GetPJList(this));
             ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
+            ViewBag.TopicId = CoTopicVM.GetUniqKey();
+
+            ViewBag.iassignlist = CoTopicVM.RetrieveTopic4List(ViewBag.username, TopicBelongType.IAssign);
+            ViewBag.irelatedlist = CoTopicVM.RetrieveTopic4List(ViewBag.username, TopicBelongType.IRelated);
+
             return View();
         }
+
+        public ActionResult CreateNewTopic()
+        {
+            UserAuth();
+            var employlist = new List<string>();
+            employlist.AddRange(CoTopicVM.GetNewPeopleList());
+            employlist.AddRange(CfgUtility.GetEmployeeList(this));
+            ViewBag.EmployeeList = Newtonsoft.Json.JsonConvert.SerializeObject(employlist.ToArray());
+
+            var pjlist = new List<string>();
+            pjlist.AddRange(CoTopicVM.GetNewPJList());
+            pjlist.AddRange(CfgUtility.GetPJList(this));
+            ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
+            ViewBag.TopicId = CoTopicVM.GetUniqKey();
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult NewTopic()
+        {
+            UserAuth();
+
+            var topicid = Request.Form["topicid"];
+            if (!string.IsNullOrEmpty(Request.Form["JobTopicEditor"]))
+            {
+                var topiccontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
+                var subject = Request.Form["subject"];
+                CoTopicVM.AddNewTopic(topicid,subject, topiccontent, ViewBag.username, ViewBag.compName);
+            }
+
+            return RedirectToAction("Home", "CoWork");
+        }
+
+        public JsonResult NewTopicDueDate()
+        {
+            var topicid = Request.Form["topicid"];
+            var duedate = Request.Form["duedate"];
+            CoTopicVM.UpdateTopicDueDate(topicid, duedate);
+
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
+        }
+
+        public JsonResult NewTopicPJ()
+        {
+            var topicid = Request.Form["topicid"];
+            var pjs = Request.Form["pjs"];
+            var splitstrs = pjs.Split(new string[] { " #" }, StringSplitOptions.RemoveEmptyEntries);
+            var pjlist = new List<string>();
+            foreach (var pj in splitstrs)
+            {
+                pjlist.Add(pj.Replace("#", "").Trim());
+            }
+            TopicProject.UpdateTopicPJ(topicid, pjlist, this);
+
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
+        }
+
+        public JsonResult NewTopicPeople()
+        {
+            var topicid = Request.Form["topicid"];
+            var pps = Request.Form["pps"];
+            var splitstrs = pps.Split(new string[] { " @" }, StringSplitOptions.RemoveEmptyEntries);
+            var pplist = new List<string>();
+            foreach (var pj in splitstrs)
+            {
+                pplist.Add(pj.Replace("@", "").Trim());
+            }
+            CoTopicVM.UpdateTopicPeople(topicid, pplist, this);
+
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
+        }
+
     }
 }

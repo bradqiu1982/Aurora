@@ -22,8 +22,8 @@ div[MYTP="orange"] {
 .container{
     position:absolute;
     margin-top: 1%;
-    margin-left:10%;
-    margin-right:10%;
+    margin-left:5%;
+    margin-right:5%;
     width:80%;
     padding: 0 !important;
     top: 100px;
@@ -32,7 +32,7 @@ div[MYTP="orange"] {
 
 .maineditor-op {
     position:absolute;
-    top:0px;
+    top:50px;
     right:0px;
     padding: 5px 10px 15px 5px;
     z-index:1006;
@@ -77,8 +77,8 @@ div[MYTP="orange"] {
 .user-info {
     float: right;
     color: #f0f0f0;
-    margin-top: 2%;
-    margin-right: 2%;
+    margin-top: 1%;
+    margin-right: 1%;
 }
 
 .header-user {

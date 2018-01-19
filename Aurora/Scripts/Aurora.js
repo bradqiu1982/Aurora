@@ -1,5 +1,5 @@
 ﻿var Aurora = function () {
-    var common = function () {
+    var createpage = function () {
         $('body').on('click', '.maineditor-time', function () {
             $('#mainduedatemodal').modal({ backdrop: 'static' });
         })
@@ -11,12 +11,26 @@
         $('body').on('click', '.maineditor-proj', function () {
             $('#pjmodal').modal({ backdrop: 'static' });
         })
-    }
+
+        $('body').on('click', '.logo', function () {
+            window.location.href = '/CoWork/Home';
+        })
+    };
+
+    var mainpage = function () {
+        $('body').on('click', '.topiclistcls', function () {
+            alert($(this).attr('topicid'));
+        })
+    };
 
     return {
-        init: function ()
+        createpageinit: function ()
         {
-            common();
+            createpage();
+        },
+        mainpageinit:function()
+        {
+            mainpage();
         }
     };
 }();

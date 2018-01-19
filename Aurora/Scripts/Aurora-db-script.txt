@@ -7,3 +7,42 @@ CREATE TABLE [dbo].[UserCustomizeTheme](
 	[UpdateTime] [datetime] NOT NULL
 ) ON [PRIMARY]
 
+
+CREATE TABLE [dbo].[auroratopicduedate] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+    [duedate] DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
+);
+
+CREATE TABLE [dbo].[auroratopicpj] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[project]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
+	[updater]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+    [updatetime] DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
+);
+
+CREATE TABLE [dbo].[auroratopicpeople] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+    [people]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+);
+
+
+CREATE TABLE [dbo].[auroranewpj] (
+    [project]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+);
+
+CREATE TABLE [dbo].[auroranewpeople] (
+    [people]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+);
+
+
+CREATE TABLE [dbo].[CoTopicVM] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[subject]	NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[topiccontent]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[creator]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[createmachine]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
+	[createdate]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[Removed]   NVARCHAR (64)   DEFAULT ('')  NOT NULL
+);

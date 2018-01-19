@@ -4,270 +4,80 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="../../ckeditor/ckeditor.js"></script>
-<link href="~/Scripts/jquery-autocomplete/jquery.auto-complete.css" rel="stylesheet" type="text/css" />
-<script src="~/Scripts/jquery-autocomplete/jquery.auto-complete.min.js" type="text/javascript"></script>
 <script src="~/Scripts/Aurora.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(function(){
-        Aurora.init();
+        Aurora.mainpageinit();
     })
 </script>
 
 
+<div style='height:42px;width:42px;border-radius: 5px;position:fixed;top:60px;right:120px; border: 1px solid white; border-image: none;text-align:center;cursor:pointer;' data-toggle="tooltip" data-placement="center" title="Create New Topic" onclick="createnewtopic()">
+    <span class="glyphicon glyphicon-plus" style="color:white;font-size:40px;"></span>
+    <script type="text/javascript">
+        function createnewtopic() {
+            window.location.href = '/CoWork/CreateNewTopic'
+        }
+    </script>
+</div>
 <div class="content">
-    <div class="lcontainer">
-        <div class="form-group">
-                <div class="maineditor-op">
-                    <span class="glyphicon glyphicon-time maineditor-time" data-toggle="tooltip" title="choose due date" style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-user maineditor-people" data-toggle="tooltip" title="choose people"  style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-tasks maineditor-proj" data-toggle="tooltip" title="choose projects" style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-paperclip maineditor-attach btn-file" data-toggle="tooltip" title="choose attachment" style="height:25px;width:25px;text-align:center;">
-                        <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
-                    </span>
-                </div>
-
-                <textarea name="JobTopicEditor" id="JobTopicEditor" rows="10" cols="80"></textarea>
-                <script>
-                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa' });
-                </script>
-
-        </div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="col-xs-4">
-                        
+    <div class="container">
+        <div><h1 style="color:white;text-align:center">Topics</h1></div>
+        <br>
+        <div>
+            <div class="col-xs-5">
+                <ul class="nav nav-pills nav-stacked col-xs-3">
+                    <li class="active"><a href="#tab_a" data-toggle="pill">I-Assign</a></li>
+                    <li><a href="#tab_b" data-toggle="pill">I-Rlated</a></li>
+                    <li><a href="#tab_c" data-toggle="pill">Complete</a></li>
+                </ul>
+                <div class="tab-content col-xs-9">
+                    <div class="tab-pane active" id="tab_a">
+                        @foreach (var item in ViewBag.iassignlist)
+                        {
+                            <div class="topiclistcls" topicid="@item.topicid" style="color:white;border: 1px solid white; border-image: none;cursor:pointer">
+                                <div class="row">
+                                    <div class="col-xs-6">@item.creator</div>
+                                    <div class="col-xs-6">@item.duedate</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6"></div>
+                                    <div class="col-xs-6">
+                                        <div class="progress" style="height:8px;max-height:8px;width:60px;margin-bottom:0px;">
+                                            <div class="progress-bar progress-bar-success" style="width: 20%;border: 1px solid white; border-image: none;">
+                                            </div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%;border: 1px solid white; border-image: none;">
+                                            </div>
+                                            <div class="progress-bar" style="width: 20%;border: 1px solid white; border-image: none;background-color:grey">
+                                            </div>
+                                            <div class="progress-bar" style="width: 20%;border: 1px solid white; border-image: none;background-color:grey">
+                                            </div>
+                                            <div class="progress-bar" style="width: 20%;border: 1px solid white; border-image: none;background-color:grey">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                    @item.subject
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    <div class="col-xs-8"></div>
-                </div>
-                <script type="text/javascript">
-                    function ShowFileNamex(oFile) {
-                                ajaxFileUploadx();
-                            }
-                    function ajaxFileUploadx() {
-                        $.ajaxFileUpload
-                        (
-                            {
-                                url: '/userfiles/ImageUpload.ashx',
-                                secureuri: false,
-                                fileElementId: 'file1',
-                                dataType: 'HTML',
-                                success: function (data, status)
-                                {
-                                    var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + data;
-                                    CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-                                },
-                                error: function (e)
-                                {
-                                    alert(e);
-                                }
-                            }
-                        )
-                        return false;
-                    }
-                </script>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<div class="modal" id="mainduedatemodal" style="margin-top:12%" tabindex="-1" role="dialog" aria-labelledby="mainduedatemodalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="mainduedatemodalLabel">Choose Due Date</h4>
-            </div>
-            <br>
-            <div class="row">
-                <div class="bs-example" style="text-align:center">
-                    <div class="col-lg-1">
+                    <div class="tab-pane" id="tab_b">
                     </div>
-                    <div class="col-lg-4">
-                         <input class="form-control" id="duedate" name="duedate">
-                    </div>
-                    <div class="col-lg-2">
+                    <div class="tab-pane" id="tab_c">
                     </div>
                 </div>
             </div>
-            <br>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="cancelduedate()">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="doneduedate()">Done</button>
+            <div class="col-xs-7">
+                <div id="TopicDetailContainer">
+
+                </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-            function doneduedate()
-            {
-                $('#mainduedatemodal').modal('hide');
-                var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>Due Date:' + $('#duedate').val() + '</p>';
-                CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-            }
-            function cancelduedate() {
-                $('#duedate').val('');
-                $('#mainduedatemodal').modal('hide');
-            }
-            $(function () {
-                $('#duedate').datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: 'yy-mm-dd'
-                });
-            });
-    </script>
 </div>
 
-<div class="modal" id="relatedmodal" style="margin-top:12%"  tabindex="-1" role="dialog" aria-labelledby="relatedmodalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="relatedmodalLabel">Choose People</h4>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">To Who</label>
-                </div>
-                <div class="col-xs-8">
-                    <input class="form-control" id="choosepeople" name="choosepeople">
-                </div>
-                <div class="col-xs-1">
-                    <span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="pump2towhoinput2()"></span>
-                </div>
-                <script type="text/javascript">
-                            function pump2towhoinput(choosed)
-                            {
-                                $('#towhoinput1').val( $('#towhoinput1').val() + '@@' + choosed + ' ');
-                            }
-
-                            function pump2towhoinput2()
-                            {
-                                $('#towhoinput1').val( $('#towhoinput1').val() + '@@' + $('#choosepeople').val() + ' ');
-                            }
-                </script>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">To who Input</label>
-                </div>
-                <div class="col-xs-9" data-toggle="tooltip" data-placement="center" title="Exampel: peopleS...">
-                    <textarea class="form-control col-xs-12" name="towhoinput1" id="towhoinput1" style="height:100px;min-width:300px;"></textarea>
-                </div>
-            </div>
-            <br>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="cancelchoosepeople()">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="donechoosepeople()">Done</button>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        function donechoosepeople()
-        {
-            $('#relatedmodal').modal('hide');
-            var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#towhoinput1').val() + '</p>';
-            CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-        }
-        function cancelchoosepeople() {
-            $('#towhoinput1').val('');
-            $('#relatedmodal').modal('hide');
-        }
-
-        $('#choosepeople').autoComplete({
-            minChars: 0,
-            source: function (term, suggest) {
-                term = term.toLowerCase();
-                var choices = @Html.Raw(ViewBag.EmployeeList);
-                var suggestions = [];
-                for (i = 0; i < choices.length; i++)
-                    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
-                suggest(suggestions);
-            },
-            onSelect: function(event, term, item)	{
-                pump2towhoinput(term);
-            }
-
-        });
-    </script>
-</div>
-
-
-<div class="modal" id="pjmodal" style="margin-top:12%" tabindex="-1" role="dialog" aria-labelledby="pjmodalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="pjmodalLabel">Choose Project</h4>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">PJ List</label>
-                </div>
-                <div class="col-xs-8">
-                    <input class="form-control" id="choosepj" name="choosepj">
-                </div>
-                <div class="col-xs-1">
-                    <span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="pump2pjinput2()"></span>
-                </div>
-                <script type="text/javascript">
-                            function pump2pjinput(choosed)
-                            {
-                                $('#pjinput').val( $('#pjinput').val() + '#' + choosed + ' ');
-                            }
-                            
-                            function pump2pjinput2()
-                            {
-                                $('#pjinput').val( $('#pjinput').val() + '#' + $('#choosepj').val() + ' ');
-                            }
-                </script>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">PJ Input</label>
-                </div>
-                <div class="col-xs-9" data-toggle="tooltip" data-placement="center" title="Exampel: #project1 #project2 #project3...">
-                    <textarea class="form-control col-xs-12" name="pjinput" id="pjinput" style="height:100px;min-width:300px;"></textarea>
-                </div>
-            </div>
-            <br>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="cancelchoosepj()">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="donechoosepj()">Done</button>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        function donechoosepj()
-        {
-            $('#pjmodal').modal('hide');
-            var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#pjinput').val() + '</p>';
-            CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-        }
-        function cancelchoosepj() {
-            $('#pjinput').val('');
-            $('#pjmodal').modal('hide');
-        }
-
-        $('#choosepj').autoComplete({
-            minChars: 0,
-            source: function (term, suggest) {
-                term = term.toLowerCase();
-                var choices = @Html.Raw(ViewBag.PJList);
-                var suggestions = [];
-                for (i = 0; i < choices.length; i++)
-                    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
-                suggest(suggestions);
-            },
-            onSelect: function(event, term, item)	{
-                pump2pjinput(term);
-            }
-
-        });
-    </script>
-</div>

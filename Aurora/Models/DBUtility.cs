@@ -43,7 +43,7 @@ namespace Aurora.Models
             {
                 if (IsDebug())
                 {
-                    conn.ConnectionString = "Server=wux-d80008792;User ID=NebulaNPI;Password=abc@123;Database=NebulaTrace;Connection Timeout=120;";
+                    conn.ConnectionString = "Server=wux-d80008792;User ID=dbg;Password=dbgpwd;Database=DebugDB;Connection Timeout=120;";
                 }
                 else
                 {
@@ -240,7 +240,7 @@ namespace Aurora.Models
             }
         }
 
-        public static bool ExeLocalSqlNoRes(string sql)
+        public static bool ExeLocalSqlNoRes(string sql, Dictionary<string, string> parameters = null)
         {
             var conn = GetLocalConnector();
             if (conn == null)
@@ -250,6 +250,17 @@ namespace Aurora.Models
             {
                 var command = conn.CreateCommand();
                 command.CommandText = sql;
+                if (parameters != null)
+                {
+                    foreach (var param in parameters)
+                    {
+                        SqlParameter parameter = new SqlParameter();
+                        parameter.ParameterName = param.Key;
+                        parameter.SqlDbType = SqlDbType.NVarChar;
+                        parameter.Value = param.Value;
+                        command.Parameters.Add(parameter);
+                    }
+                }
                 command.ExecuteNonQuery();
                 CloseConnector(conn);
                 return true;

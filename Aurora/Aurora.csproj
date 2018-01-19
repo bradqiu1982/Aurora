@@ -175,7 +175,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CfgUtility.cs" />
-    <Compile Include="Models\CoJobVM.cs" />
+    <Compile Include="Models\CoTopicVM.cs" />
     <Compile Include="Models\DBUtility.cs" />
     <Compile Include="Models\UserCustomizeThemeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -716,6 +716,7 @@
     <Content Include="Scripts\lobilist\lib\lobibox\sounds\sound6.ogg" />
     <Content Include="userfiles\ImageUpload.ashx" />
     <Content Include="userfiles\Upload.ashx" />
+    <Content Include="Views\CoWork\CreateNewTopic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
