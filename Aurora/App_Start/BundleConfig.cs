@@ -27,8 +27,7 @@ namespace Aurora
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-3.3.7/css/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/bootstrap-3.3.7/css/bootstrap.css"));
         }
     }
 }

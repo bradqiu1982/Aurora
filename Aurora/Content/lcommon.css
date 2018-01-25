@@ -62,6 +62,7 @@ div[MYTP="orange"] {
 .header-user {
     font-size: 12px;
     padding-right: 5px;
+    color:black;
 }
 
 .logout {

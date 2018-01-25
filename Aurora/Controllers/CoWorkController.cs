@@ -60,6 +60,24 @@ namespace Aurora.Controllers
             return View();
         }
 
+        public JsonResult TopicByID()
+        {
+            var topicid = Request.Form["topicid"];
+            var tempvm = CoTopicVM.RetrieveTopic(topicid);
+            var ret = new JsonResult();
+            if (tempvm.Count > 0)
+            {
+                ret.Data = new { sucess = true
+                                ,data = tempvm[0]};
+            }
+            else
+            {
+                ret.Data = new { sucess = false };
+            }
+
+            return ret;
+        }
+
         public ActionResult CreateNewTopic()
         {
             UserAuth();

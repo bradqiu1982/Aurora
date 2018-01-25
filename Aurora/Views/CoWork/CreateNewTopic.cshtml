@@ -18,8 +18,10 @@
 
 <div><h1 style="color:white;text-align:center">New Topic</h1></div>
 
-<div class="content">
+@*<div class="content">*@
     <div class="lcontainer">
+        <hr style="color:grey;margin-top:5px;margin-bottom:5px;border: 1px solid;border-color:grey" />
+
         @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -88,7 +90,7 @@
             </div>
         }
     </div>
-</div>
+@*</div>*@
 
 <div class="modal" id="mainduedatemodal" style="margin-top:12%" tabindex="-1" role="dialog" aria-labelledby="mainduedatemodalLabel">
     <div class="modal-dialog" role="document">

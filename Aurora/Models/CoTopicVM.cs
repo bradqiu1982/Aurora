@@ -127,6 +127,86 @@ namespace Aurora.Models
             return (des.Length > 180) ? des.Substring(0, 180) : des;
         }
 
+
+        //private static string resizeimg(string imgstr)
+        //{
+        //    var splitstr = imgstr.Split(new string[] { "width=\""}, StringSplitOptions.RemoveEmptyEntries);
+        //    var width = splitstr[1].Split(new string[] { "\""},StringSplitOptions.RemoveEmptyEntries)[0];
+        //    splitstr = imgstr.Split(new string[] { "height=\""}, StringSplitOptions.RemoveEmptyEntries);
+        //    var height = splitstr[1].Split(new string[] { "\"" }, StringSplitOptions.RemoveEmptyEntries)[0];
+
+        //    var iw = Convert.ToDouble(width);
+        //    var ih = Convert.ToDouble(height);
+        //    if (iw > 700)
+        //    {
+        //        var srcidx = imgstr.IndexOf("src=\"");
+        //        var srceidx = imgstr.IndexOf("\"", srcidx + 6);
+        //        var srcstr = imgstr.Substring(srcidx, (srceidx + 1 - srcidx));
+        //        var newh = Convert.ToInt32( 700.0 / iw * ih);
+        //        return "<img width=\"700\" height=\"" + newh.ToString() + "\" " + srcstr + ">";
+        //    }
+        //    else
+        //    {
+        //        return imgstr;
+        //    }
+        //}
+
+        //public static string ResizeImageFromHtml(string src)
+        //{
+        //    var startidx = 0;
+        //    while (src.IndexOf("<img", startidx) != -1)
+        //    {
+        //        var imgsidx = src.IndexOf("<img",startidx);
+        //        var imgeidx = src.IndexOf(">", imgsidx);
+        //        if (imgeidx != -1)
+        //        {
+        //            startidx = imgeidx;
+        //            imgeidx = imgeidx + 1;
+        //            var imgstr = src.Substring(imgsidx, (imgeidx - imgsidx));
+        //            if (imgstr.Contains("width=\"") && imgstr.Contains("height=\""))
+        //            {
+        //                var nimgstr = resizeimg(imgstr);
+        //                src = src.Remove(imgsidx, imgeidx - imgsidx).Insert(imgsidx, nimgstr);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            startidx = imgsidx+3;
+        //        }
+        //    }
+        //    return src;
+        //}
+
+        private static string resizeimg(string imgstr)
+        {
+            var srcidx = imgstr.IndexOf("src=\"");
+            var srceidx = imgstr.IndexOf("\"", srcidx + 6);
+            var srcstr = imgstr.Substring(srcidx, (srceidx + 1 - srcidx));
+            return "<div style=\"text-align: center;\">" + "<img " + srcstr + " style=\"max-width: 90%; height: auto;\" /></div>";
+        }
+        public static string ResizeImageFromHtml(string src)
+        {
+            var startidx = 0;
+            while (src.IndexOf("<img", startidx) != -1)
+            {
+                var imgsidx = src.IndexOf("<img", startidx);
+                var imgeidx = src.IndexOf(">", imgsidx);
+                if (imgeidx != -1)
+                {
+                    startidx = imgeidx;
+                    imgeidx = imgeidx + 1;
+                    var imgstr = src.Substring(imgsidx, (imgeidx - imgsidx));
+                    var nimgstr = resizeimg(imgstr);
+                    src = src.Remove(imgsidx, imgeidx - imgsidx).Insert(imgsidx, nimgstr);
+                }
+                else
+                {
+                    startidx = imgsidx + 3;
+                }
+            }
+            return src.Replace("</img>","");
+        }
+
     }
 
 
@@ -260,6 +340,30 @@ namespace Aurora.Models
             }
 
             return ret; 
+        }
+
+        public static List<CoTopicVM> RetrieveTopic(string topicid)
+        {
+            var ret = new List<CoTopicVM>();
+            var sql = "select topicid,subject,creator,status,createdate,topiccontent from CoTopicVM where topicid = '<topicid>'";
+            sql = sql.Replace("<topicid>", topicid);
+
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            foreach (var line in dbret)
+            {
+                var imgresize = SeverHtmlDecode.ResizeImageFromHtml(Convert.ToString(line[5]));
+                
+                var tempvm = new CoTopicVM(Convert.ToString(line[0]), Convert.ToString(line[1]), imgresize, Convert.ToString(line[2])
+                    , Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss"));
+
+                tempvm.duedate = RetrieveTopicDueDate(tempvm.topicid);
+                tempvm.ProjectWorkingList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Working);
+                tempvm.ProjectDoneList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Done);
+
+                ret.Add(tempvm);
+            }
+
+            return ret;
         }
 
         public CoTopicVM()
