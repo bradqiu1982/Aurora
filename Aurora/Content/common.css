@@ -10,7 +10,7 @@ div[MYTP="orange"] {
 
 .lcontainer{
     position:absolute;
-    margin-top: 3%;
+    margin-top: 10%;
     margin-left:10%;
     margin-right:10%;
     padding: 0 !important;
@@ -41,6 +41,11 @@ div[MYTP="orange"] {
     z-index: 1001;
 }
 
+.createeditor-div {
+    margin-top:1%;
+    margin-left:3%;
+    margin-right:3%;
+}
 
 .nav-sidebar {
     display: inline-block;
@@ -105,10 +110,17 @@ div[MYTP="orange"] {
     height: 100%;   
 }
 
-.item-panel{
+.item-panel-active{
     min-height: 100px;
     margin-top: 5px;
     border: 1px #337ab7 solid;
+    border-left-width: 5px;
+}
+
+.item-panel{
+    min-height: 100px;
+    margin-top: 5px;
+    border: 1px #aaa solid;
     border-left-width: 5px;
 }
 
@@ -183,10 +195,49 @@ div[MYTP="orange"] {
     cursor:pointer;
 }
 
-.itemdetailhide {
+/*.itemdetailhide {
     display:none;
+}*/
+
+.itemdetailinfo {
+    margin-right:1%;
 }
 
+.topicinfo {
+    margin-top:5px;
+    border-left:3px solid #428bca;
+
+}
+
+.topictitle {
+    padding:5px;
+    width:100%;
+    min-height:32px;
+    background:#efefef;
+    font-size:20px;
+}
+
+.titlesubject {
+    display:inline-block;
+    padding:5px;
+}
+
+.topictitlemenu {
+    float:right;
+    display:inline-block;
+    cursor:pointer;
+}
+
+.topiccontent {
+    padding:10px!important;
+}
+
+.topicfooter {
+    text-align:right;
+    padding:5px;
+    font-style:italic;
+    font-weight:bold;
+}
 
 .itemlistswitchclose{
 	position: absolute;
@@ -220,8 +271,8 @@ div[MYTP="orange"] {
 
 .maineditor-op {
     position:absolute;
-    top:50px;
-    right:0px;
+    top:10%;
+    right:4%;
     padding: 5px 10px 15px 5px;
     z-index:1006;
 }
@@ -235,6 +286,37 @@ div[MYTP="orange"] {
     top:10px;
     margin: auto 5px;
     cursor: pointer;
+}
+
+.commentinfo {
+    border-left:2px solid #428bca;
+    margin-top:15px;
+    margin-right:1%;
+}
+
+.commentinfo:hover {
+    background-color: #efefef;
+    }
+
+.commenttitle {
+    padding:5px;
+    font-style:italic;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.commentop {
+    float:right;
+    display:inline-block;
+}
+
+.commentopitem {
+    margin-right:10px;
+    cursor:pointer;
+}
+
+.commentcontent {
+    padding:10px!important;
 }
 
 
@@ -317,26 +399,28 @@ div[MYTP="orange"] {
 }
 
 .br-panel {
-    margin-left: 15%;
+
+    margin-top:15px;
     border-color: transparent !important;
     background-color: transparent !important;
 }
 .br-panel-title {
+    color:black;
     border-color: transparent !important;
     background-color: transparent !important;
     border-left-style: solid;
-    border-left-color: #33CCFF !important;
-    border-left-width: 5px !important;
+    border-left-color: #FF7400 !important;
+    border-left-width: 3px !important;
 }
 .br-panel-heading {
     padding: 0;
-    color: #efefef !important;
+    color: #FF7400 !important;
     border-color: transparent !important;
     background-color: transparent !important;
 }
 
 .chevron-down {
-    color: #33CCFF;
+    color: #FF7400;
     padding: 2px 5px;
 }
 
@@ -368,3 +452,5 @@ div[MYTP="orange"] {
 .right-line{
     border-right: 1px #24323B solid !important;
 }
+
+

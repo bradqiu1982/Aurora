@@ -5,6 +5,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Aurora.Models;
+using System.Web.Routing;
 
 namespace Aurora.Controllers
 {
@@ -40,7 +41,7 @@ namespace Aurora.Controllers
         }
 
         // GET: CoWork
-        public ActionResult Home()
+        public ActionResult Home(string activenavitem,string topicid)
         {
             UserAuth();
             var employlist = new List<string>();
@@ -54,8 +55,40 @@ namespace Aurora.Controllers
             ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
             ViewBag.TopicId = CoTopicVM.GetUniqKey();
 
-            ViewBag.iassignlist = CoTopicVM.RetrieveTopic4List(ViewBag.username, TopicBelongType.IAssign);
-            ViewBag.irelatedlist = CoTopicVM.RetrieveTopic4List(ViewBag.username, TopicBelongType.IRelated);
+            var tempnavlist = new List<string>();
+            tempnavlist.AddRange(new string[] { TopicBelongType.IAssign, TopicBelongType.IRelated, TopicBelongType.Completed });
+            ViewBag.NavList = tempnavlist;
+            if (string.IsNullOrEmpty(activenavitem)) 
+            {
+                ViewBag.ActiveNav = tempnavlist[0];
+            }
+            else {
+                ViewBag.ActiveNav = activenavitem;
+            }
+
+            if (string.Compare(ViewBag.ActiveNav, TopicBelongType.Completed) == 0)
+            {
+                ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username);
+            }
+            else
+            {
+                ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav);
+            }
+
+            
+            if (!string.IsNullOrEmpty(topicid))
+            {
+                ViewBag.ActiveTopicid = topicid;
+                ViewBag.CurrentTopic = CoTopicVM.RetrieveTopic(ViewBag.ActiveTopicid);
+            }
+            else
+            {
+                if (ViewBag.topiclist.Count > 0)
+                {
+                    ViewBag.ActiveTopicid = ViewBag.topiclist[0].topicid;
+                    ViewBag.CurrentTopic = CoTopicVM.RetrieveTopic(ViewBag.ActiveTopicid);
+                }
+            }
 
             return View();
         }
@@ -154,6 +187,27 @@ namespace Aurora.Controllers
             var ret = new JsonResult();
             ret.Data = new { sucess = true };
             return ret;
+        }
+
+        [HttpPost]
+        public ActionResult NewTopicComment()
+        {
+            UserAuth();
+            var activetopicid = Request.Form["activetopicid"];
+            var activenavitem = Request.Form["activenav"];
+            var commentcontent = SeverHtmlDecode.Decode(this, Request.Form["CommentEditor"]);
+            if (!string.IsNullOrEmpty(commentcontent))
+            {
+                var commenttime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                var commentid = CoTopicVM.GetUniqKey();
+
+                TopicCommentVM.AddComment(activetopicid, commentid, commentcontent, ViewBag.username, commenttime);
+            }
+
+            var routedict = new RouteValueDictionary();
+            routedict.Add("activenavitem", activenavitem);
+            routedict.Add("topicid", activetopicid);
+            return RedirectToAction("Home", "CoWork", routedict);
         }
 
     }

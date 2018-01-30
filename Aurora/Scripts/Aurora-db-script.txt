@@ -43,6 +43,17 @@ CREATE TABLE [dbo].[CoTopicVM] (
 	[creator]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
 	[createmachine]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
 	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
-	[createdate]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[createdate]   DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL,
 	[Removed]   NVARCHAR (64)   DEFAULT ('')  NOT NULL
 );
+
+CREATE TABLE [dbo].[TopicCommentVM] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[commentid]	NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[commentcontent]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[creator]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[commentdate]   DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL,
+	[AppVal1]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[AppVal2]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+);
+

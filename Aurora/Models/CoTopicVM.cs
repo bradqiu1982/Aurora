@@ -21,8 +21,9 @@ namespace Aurora.Models
 
     public class TopicBelongType
     {
-        public static string IAssign = "IAssign";
-        public static string IRelated = "IRelated";
+        public static string IAssign = "I-Assign";
+        public static string IRelated = "I-Related";
+        public static string Completed = "Completed";
     }
 
     public class SeverHtmlDecode
@@ -327,8 +328,6 @@ namespace Aurora.Models
             var dbret = DBUtility.ExeLocalSqlWithRes(sql);
             foreach (var line in dbret)
             {
-                //var imgremoved = SeverHtmlDecode.RemoveImageFromHtml(Convert.ToString(line[2]));
-                //var notag = SeverHtmlDecode.NoTagContent(imgremoved);
                 var tempvm = new CoTopicVM(Convert.ToString(line[0]), Convert.ToString(line[1]), "", Convert.ToString(line[2])
                     , Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -340,6 +339,24 @@ namespace Aurora.Models
             }
 
             return ret; 
+        }
+
+        public static List<CoTopicVM> RetrieveCompleteTopic4List(string username)
+        {
+            var Iassignlist = RetrieveTopic4List(username, TopicBelongType.IAssign, TopicStatus.Done);
+            Iassignlist.AddRange(RetrieveTopic4List(username, TopicBelongType.IRelated, TopicStatus.Done));
+            Iassignlist.Sort(delegate (CoTopicVM c1, CoTopicVM c2) {
+                var date1 = DateTime.Parse(c1.createdate);
+                var date2 = DateTime.Parse(c2.createdate);
+                if (date2 > date1)
+                    return 1;
+                else if (date2 < date1)
+                    return -1;
+                else
+                    return 0;
+            });
+
+            return Iassignlist;
         }
 
         public static List<CoTopicVM> RetrieveTopic(string topicid)
@@ -359,6 +376,7 @@ namespace Aurora.Models
                 tempvm.duedate = RetrieveTopicDueDate(tempvm.topicid);
                 tempvm.ProjectWorkingList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Working);
                 tempvm.ProjectDoneList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Done);
+                tempvm.CommentList = TopicCommentVM.RetrieveComment(tempvm.topicid);
 
                 ret.Add(tempvm);
             }
@@ -386,6 +404,20 @@ namespace Aurora.Models
             duedate = "";
             status = stat;
             createdate = cdate;
+        }
+
+        private List<TopicCommentVM> comlist = new List<TopicCommentVM>();
+        public List<TopicCommentVM> CommentList
+        {
+            set
+            {
+                comlist.Clear();
+                comlist.AddRange(value);
+            }
+            get
+            {
+                return comlist;
+            }
         }
 
         public string topicid { set; get; }

@@ -177,6 +177,7 @@
     <Compile Include="Models\CfgUtility.cs" />
     <Compile Include="Models\CoTopicVM.cs" />
     <Compile Include="Models\DBUtility.cs" />
+    <Compile Include="Models\TopicCommentVM.cs" />
     <Compile Include="Models\UserCustomizeThemeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

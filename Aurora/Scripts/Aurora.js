@@ -21,17 +21,8 @@
 
         $('body').on('click', '.topiclistcls', function () {
             var topicid = $(this).attr('topicid');
-            $.post('/CoWork/TopicByID',
-                { topicid: topicid }
-                , function (output) {
-                    if (output.sucess)
-                    {
-                        $('.itemdetailinfo').empty();
-                        $('.itemdetailinfo').append(output.data.topiccontent);
-                        $('.itemdetailinfo').removeClass("itemdetailhide");
-                    }
-
-                })
+            var activenavitem = $('.activenavitem').attr("navid");
+            window.location.href = '/CoWork/Home?activenavitem=' + activenavitem + '&topicid='+topicid;
         })
 
         $('body').on('click', '.nav-sidebar-icon', function () {
