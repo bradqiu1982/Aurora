@@ -277,6 +277,14 @@ div[MYTP="orange"] {
     z-index:1006;
 }
 
+.mdeditor-op {
+    position:absolute;
+    top:4%;
+    right:15%;
+    padding: 5px 10px 15px 5px;
+    z-index:1006;
+}
+
 .maineditor-people,.maineditor-time,.maineditor-proj {
     margin: auto 5px;
     cursor: pointer;
@@ -310,7 +318,7 @@ div[MYTP="orange"] {
     display:inline-block;
 }
 
-.commentopitem {
+.home-md-commont {
     margin-right:10px;
     cursor:pointer;
 }
@@ -346,6 +354,22 @@ div[MYTP="orange"] {
     z-index: 1003;
 }
 
+.logo-bak {
+    position: absolute;
+    margin-top: 0%;
+    height: 50px;
+    background-image: url(./images/logo-bak.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    cursor: pointer;
+    z-index: 1003;
+}
+
+
+
 .user-info {
     float: right;
     color: #f0f0f0;
@@ -366,7 +390,76 @@ div[MYTP="orange"] {
     z-index: 1003;
 }
 
+.Login-Modal {
+    position:absolute;
+    padding:10% 20%!important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0;
+    bottom:0;
+    right:0;
+    background: rgba(255,255,255,0.8);
+}
 
+.Login-Content {
+    height:300px!important;
+    border: 1px solid #aaa;
+    background:rgba(168,168,168,0.5);
+    border-radius:5px;
+}
+
+.Login-Content {
+    display:block;
+}
+
+.Login-info-1 {
+    font-size:30px;
+    padding:5px 15px;
+}
+
+.Login-info-2 {
+    font-size:24px;
+    padding:0px 15px;;
+    margin-left:60px;
+}
+
+.Login-Input-Area {
+    display:block;
+    margin-top:10px;
+}
+
+.Login-Input {
+    width:180px!important;
+    display:inline-block;
+    margin-left:75px;
+    border-left:2px solid #FF7400;
+}
+
+.Login-Input-Fix {
+    background-color:#ddd;
+    border-radius:3px;
+    display:inline-block;
+    font-size:18px;
+    padding:3px;
+    margin-left:4px;
+}
+
+.Login-Input-EG {
+    background-color:#ddd;
+    border-radius:3px;
+    display:inline-block;
+    font-size:18px;
+    padding:3px;
+    margin-left:4px;
+    color:white;
+}
+
+.Login-Submit {
+    margin-top:10px;
+    display:block;
+    margin-left:75px;
+}
 
 /* theme setting*/
 .theme-setting {

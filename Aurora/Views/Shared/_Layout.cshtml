@@ -32,7 +32,15 @@
 </head>
 <body>
     <header>
-        <span class="col-xs-3 logo"></span>
+        @*@if (ViewBag.NoSuchUserName != null && ViewBag.NoSuchUserName)
+        {
+            <span class="col-xs-3 logo-bak"></span>
+        }
+        else
+        {*@
+            <span class="col-xs-3 logo"></span>
+        @* } *@
+
         <div class="user-info">
             <span class="header-user">@ViewBag.username</span>
         </div>

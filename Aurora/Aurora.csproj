@@ -177,6 +177,7 @@
     <Compile Include="Models\CfgUtility.cs" />
     <Compile Include="Models\CoTopicVM.cs" />
     <Compile Include="Models\DBUtility.cs" />
+    <Compile Include="Models\MachineUserMap.cs" />
     <Compile Include="Models\TopicCommentVM.cs" />
     <Compile Include="Models\UserCustomizeThemeVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -588,6 +589,7 @@
     <Content Include="Content\bootstrap-3.3.7\js\npm.js" />
     <Content Include="Content\bootstrapfileinput.css" />
     <Content Include="Content\common.css" />
+    <Content Include="Content\images\logo-bak.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
@@ -718,6 +720,8 @@
     <Content Include="userfiles\ImageUpload.ashx" />
     <Content Include="userfiles\Upload.ashx" />
     <Content Include="Views\CoWork\CreateNewTopic.cshtml" />
+    <Content Include="Views\CoWork\ModifyTopic.cshtml" />
+    <Content Include="Views\CoWork\Welcome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

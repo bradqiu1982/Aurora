@@ -44,6 +44,12 @@ namespace Aurora.Controllers
         public ActionResult Home(string activenavitem,string topicid)
         {
             UserAuth();
+
+            if (string.Compare(ViewBag.username,ViewBag.compName) == 0)
+            {
+                return RedirectToAction("Welcome");
+            }
+
             var employlist = new List<string>();
             employlist.AddRange(CoTopicVM.GetNewPeopleList());
             employlist.AddRange(CfgUtility.GetEmployeeList(this));
@@ -91,6 +97,20 @@ namespace Aurora.Controllers
             }
 
             return View();
+        }
+
+        public ActionResult Welcome()
+        {
+            return View();
+        }
+
+        public JsonResult UpdateMachineUserName()
+        {
+
+
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
         }
 
         public JsonResult TopicByID()
@@ -202,6 +222,69 @@ namespace Aurora.Controllers
                 var commentid = CoTopicVM.GetUniqKey();
 
                 TopicCommentVM.AddComment(activetopicid, commentid, commentcontent, ViewBag.username, commenttime);
+            }
+
+            var routedict = new RouteValueDictionary();
+            routedict.Add("activenavitem", activenavitem);
+            routedict.Add("topicid", activetopicid);
+            return RedirectToAction("Home", "CoWork", routedict);
+        }
+
+        public ActionResult ModifyTopic(string activenavitem, string topicid, string commentid)
+        {
+            if (!string.IsNullOrEmpty(topicid) && !string.IsNullOrEmpty(commentid))
+            {
+                ViewBag.activenavitem = activenavitem;
+                ViewBag.topicid = topicid;
+                ViewBag.commentid = commentid;
+                var commentlist = TopicCommentVM.RetrieveComment(topicid, commentid);
+                if (commentlist.Count > 0)
+                {
+                    ViewBag.tcontent = commentlist[0].commentcontent;
+                }
+                else
+                {
+                    return RedirectToAction("Home", "CoWork");
+                }
+            }
+            else if (!string.IsNullOrEmpty(topicid))
+            {
+                ViewBag.activenavitem = activenavitem;
+                ViewBag.topicid = topicid;
+                ViewBag.commentid = "";
+                var topiclist = CoTopicVM.RetrieveTopic(topicid);
+                if (topiclist.Count > 0)
+                {
+                    ViewBag.tcontent = topiclist[0].topiccontent;
+                }
+                else
+                {
+                    return RedirectToAction("Home", "CoWork");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Home", "CoWork");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ModifyTopicPost()
+        {
+            var activenavitem = Request.Form["navid"];
+            var activetopicid = Request.Form["topicid"];
+            var commentid = Request.Form["commentid"];
+            var tcontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
+
+            if (!string.IsNullOrEmpty(activetopicid) && !string.IsNullOrEmpty(commentid))
+            {
+                TopicCommentVM.UpdateComment(commentid, tcontent);
+            }
+            else
+            {
+                CoTopicVM.UpdateTopic(activetopicid, tcontent);
             }
 
             var routedict = new RouteValueDictionary();

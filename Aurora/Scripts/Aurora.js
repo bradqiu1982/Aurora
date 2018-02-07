@@ -25,6 +25,22 @@
             window.location.href = '/CoWork/Home?activenavitem=' + activenavitem + '&topicid='+topicid;
         })
 
+        $('body').on('click', '.home-md-topic', function () {
+            var topicid = $('#currenttopicid').val();
+            var activenavitem = $('.activenavitem').attr('navid');
+            window.location.href = '/CoWork/ModifyTopic?activenavitem=' + activenavitem + '&topicid=' + topicid;
+        })
+
+        $('body').on('click', '.home-md-commont', function () {
+            var topicid = $('#currenttopicid').val();
+            var activenavitem = $('.activenavitem').attr('navid');
+            var cid = $(this).attr('cid');
+            window.location.href = '/CoWork/ModifyTopic?activenavitem=' + activenavitem + '&topicid=' + topicid+'&commentid='+cid;
+        })
+
+        
+        
+
         $('body').on('click', '.nav-sidebar-icon', function () {
             var ndhide = $('.item-panels').hasClass('hide');
 

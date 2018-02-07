@@ -52,6 +52,21 @@ namespace Aurora.Models
             return ret;
         }
 
+        public static List<TopicCommentVM> RetrieveComment(string tid,string cid)
+        {
+            var ret = new List<TopicCommentVM>();
+            var sql = "select topicid,commentid,commentcontent,creator,commentdate from TopicCommentVM where topicid = '<topicid>' and commentid = '<commentid>'";
+            sql = sql.Replace("<topicid>", tid).Replace("<commentid>",cid);
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            foreach (var line in dbret)
+            {
+                var imgresize = SeverHtmlDecode.ResizeImageFromHtml(Convert.ToString(line[2]));
+                ret.Add(new TopicCommentVM(Convert.ToString(line[0]), Convert.ToString(line[1])
+                    , imgresize, Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss")));
+            }
+            return ret;
+        }
+
         public static void UpdateComment(string cid,string cc)
         {
             var sql = "update TopicCommentVM set commentcontent = @commentcontent where commentid = @commentid";

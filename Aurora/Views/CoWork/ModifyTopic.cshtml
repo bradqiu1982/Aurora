@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Modify Topic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="../../ckeditor/ckeditor.js"></script>
+<link href="~/Scripts/jquery-autocomplete/jquery.auto-complete.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/jquery-autocomplete/jquery.auto-complete.min.js" type="text/javascript"></script>
+<script src="~/Scripts/Aurora.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function(){
+        Aurora.createpageinit();
+    })
+</script>
+
+<div class="newcontainer">
+    <hr style="color:grey;margin-top:1px;margin-bottom:1px;border: 1px solid;border-color:grey" />
+    <div class="createeditor-div">
+        @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group" style="padding-left:10%;padding-right:10%">
+                <div class="mdeditor-op">
+                    <span class="glyphicon glyphicon-paperclip maineditor-attach btn-file" data-toggle="tooltip" title="choose attachment" style="height:40px;width:40px;text-align:center;font-weight:bold;font-size:28px;">
+                        <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
+                    </span>
+                </div>
+                <textarea name="JobTopicEditor" id="JobTopicEditor" rows="10" cols="80">@(ViewBag.tcontent)</textarea>
+                <script>
+                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa' });
+                </script>
+
+            </div>
+
+            <div class="form-group" style="padding-left:10%;padding-right:10%">
+                <div class="row">
+
+                    <div class="col-xs-2">
+                        <input type="submit" class="form-control btn btn-success" value="Submit">
+                    </div>
+                    <div class="col-xs-10">
+                        <input id="navid" name="navid" value="@(ViewBag.activenavitem)" type="hidden">
+                        <input id="topicid" name="topicid" value="@(ViewBag.topicid)" type="hidden">
+                        <input id="commentid" name="commentid" value="@(ViewBag.commentid)" type="hidden">
+                    </div>
+
+                    <script type="text/javascript">
+                    function ShowFileNamex(oFile) {
+                                ajaxFileUploadx();
+                            }
+                    function ajaxFileUploadx() {
+                        $.ajaxFileUpload
+                        (
+                            {
+                                url: '/userfiles/ImageUpload.ashx',
+                                secureuri: false,
+                                fileElementId: 'file1',
+                                dataType: 'HTML',
+                                success: function (data, status)
+                                {
+                                    var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + data;
+                                    CKEDITOR.instances.JobTopicEditor.setData(wholeval);
+                                },
+                                error: function (e)
+                                {
+                                    alert(e);
+                                }
+                            }
+                        )
+                        return false;
+                    }
+                    </script>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

@@ -232,6 +232,15 @@ namespace Aurora.Models
             DBUtility.ExeLocalSqlNoRes(sql, param);
         }
 
+        public static void UpdateTopic(string tid, string cc)
+        {
+            var sql = "update CoTopicVM set topiccontent = @topiccontent where topicid = @topicid";
+            var param = new Dictionary<string, string>();
+            param.Add("@topicid", tid);
+            param.Add("@topiccontent", cc);
+            DBUtility.ExeLocalSqlNoRes(sql, param);
+        }
+
         public static void UpdateTopicDueDate(string topicid,string duedate)
         {
             var sql = "delete from auroratopicduedate where topicid = '<topicid>'";

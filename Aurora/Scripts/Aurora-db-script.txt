@@ -57,3 +57,13 @@ CREATE TABLE [dbo].[TopicCommentVM] (
 	[AppVal2]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
 );
 
+CREATE TABLE [dbo].[auroratopicevent] (
+    [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[event]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
+);
+
+CREATE TABLE [dbo].[aurorausermap] (
+    [machine]   NVARCHAR (300)   DEFAULT ('')  NOT NULL,
+    [username]   NVARCHAR (300)   DEFAULT ('')  NOT NULL
+);
