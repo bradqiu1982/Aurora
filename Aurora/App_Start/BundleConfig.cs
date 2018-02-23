@@ -9,7 +9,7 @@ namespace Aurora
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-3.2.1.min.js"));
+                        "~/Scripts/jquery-1.12.4.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
                         "~/Scripts/jquery-ui.min.js"));

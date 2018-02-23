@@ -19,8 +19,8 @@
     </script>
 
 
-    <div style='height:28px;width:28px;border-radius: 5px;position:fixed;top:68px;right:30px;z-index:1009; border: 1px dashed grey; border-image: none;text-align:center;cursor:pointer;' data-toggle="tooltip" data-placement="center" title="Create New Topic" onclick="createnewtopic()">
-        <span class="glyphicon glyphicon-plus" style="color:grey;font-size:24px;"></span>
+    <div style='height:28px;width:60px;border-radius: 5px;position:fixed;top:60px;right:30px;z-index:1009; border: 1px dashed grey; border-image: none;text-align:center;cursor:pointer;' data-toggle="tooltip" data-placement="center" title="Create New Topic" onclick="createnewtopic()">
+        <span class="glyphicon glyphicon-plus" style="color:lime;font-size:24px;"></span>
         <script type="text/javascript">
         function createnewtopic() {
             window.location.href = '/CoWork/CreateNewTopic'
@@ -57,15 +57,22 @@
 
         <div class="col-sm-3 item-panels" style="padding-left:8px;padding-right:8px;">
             @foreach (var item in ViewBag.topiclist)
+            {
+                var pjworklistcount = item.ProjectWorkingList.Count;
+                var pjdonelistcount = item.ProjectDoneList.Count;
+                var totalpjcount = pjworklistcount + pjdonelistcount;
+                var itempanel = "item-panel";
+                if (string.Compare(item.topicid, ViewBag.ActiveTopicid) == 0)
                 {
-                    var pjworklistcount = item.ProjectWorkingList.Count;
-                    var pjdonelistcount = item.ProjectDoneList.Count;
-                    var totalpjcount = pjworklistcount + pjdonelistcount;
-                    var itempanel = "item-panel";
-                    if (string.Compare(item.topicid, ViewBag.ActiveTopicid) == 0)
+                    itempanel = "item-panel-active";
+                }
+                else
+                {
+                    if (!item.isread)
                     {
-                        itempanel = "item-panel-active";
+                        itempanel = "item-panel-unread";
                     }
+                }
 
                     <div class="@(itempanel)">
                         <div class="item-title">

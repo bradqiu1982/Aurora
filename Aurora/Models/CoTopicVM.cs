@@ -230,6 +230,10 @@ namespace Aurora.Models
             param.Add("@status", TopicStatus.Working);
             param.Add("@createdate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             DBUtility.ExeLocalSqlNoRes(sql, param);
+
+            sql = "insert into auroratopicpeople(topicid,people,isowner) values('<topicid>','<people>','TRUE')";
+            sql = sql.Replace("<topicid>", topicid).Replace("<people>", creator);
+            DBUtility.ExeLocalSqlNoRes(sql);
         }
 
         public static void UpdateTopic(string tid, string cc)
@@ -308,6 +312,40 @@ namespace Aurora.Models
             }
        }
 
+        public static void UpdateTopicIsRead(string topicid, string people, bool isread)
+        {
+            var IsRead = isread ? "TRUE" : "FALSE";
+            var sql = "update auroratopicpeople set IsRead = '<IsRead>' where topicid= '<topicid>' and people = '<people>'";
+            sql = sql.Replace("<IsRead>", IsRead).Replace("<topicid>", topicid).Replace("<people>", people);
+            DBUtility.ExeLocalSqlNoRes(sql);
+        }
+
+        public static void UpdateTopicIsRead(string topicid, bool isread)
+        {
+            var IsRead = isread ? "TRUE" : "FALSE";
+            var sql = "update auroratopicpeople set IsRead = '<IsRead>' where topicid= '<topicid>'";
+            sql = sql.Replace("<IsRead>", IsRead).Replace("<topicid>", topicid);
+            DBUtility.ExeLocalSqlNoRes(sql);
+        }
+
+        public static Dictionary<string, bool> RetrieveTopicIsRead(string people)
+        {
+            var ret = new Dictionary<string, bool>();
+            var sql = "select topicid,IsRead from auroratopicpeople where people = '<people>'";
+            sql = sql.Replace("<people>", people);
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            foreach (var line in dbret)
+            {
+                var topicid = Convert.ToString(line[0]);
+                var IsRead = (string.Compare(Convert.ToString(line[1]),"TRUE") == 0)?true:false;
+                if (!ret.ContainsKey(topicid))
+                {
+                    ret.Add(topicid, IsRead);
+                }
+            }
+            return ret;
+        } 
+
         public static List<string> GetNewPeopleList()
         {
             var ret = new List<string>();
@@ -322,6 +360,8 @@ namespace Aurora.Models
 
         public static List<CoTopicVM> RetrieveTopic4List(string username, string topicbelongtype,string status = "WORKING")
         {
+            var topicreaddict = RetrieveTopicIsRead(username);
+
             var ret = new List<CoTopicVM>();
             var sql = "";
             if (string.Compare(topicbelongtype, TopicBelongType.IAssign) == 0)
@@ -331,7 +371,7 @@ namespace Aurora.Models
             }
             else
             {
-                sql = "select topicid,subject,creator,status,createdate from CoTopicVM where topicid in (select distinct topicid from auroratopicpeople where people = '<people>') and status = '<status>' and Removed <> 'TRUE'  order by createdate desc";
+                sql = "select topicid,subject,creator,status,createdate from CoTopicVM where topicid in (select distinct topicid from auroratopicpeople where people = '<people>' and isowner <> 'TRUE') and status = '<status>' and Removed <> 'TRUE'  order by createdate desc";
                 sql = sql.Replace("<people>", username).Replace("<status>", status);
             }
             var dbret = DBUtility.ExeLocalSqlWithRes(sql);
@@ -343,6 +383,10 @@ namespace Aurora.Models
                 tempvm.duedate = RetrieveTopicDueDate(tempvm.topicid);
                 tempvm.ProjectWorkingList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Working);
                 tempvm.ProjectDoneList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Done);
+                if (topicreaddict.ContainsKey(tempvm.topicid))
+                {
+                    tempvm.isread = topicreaddict[tempvm.topicid];
+                }
 
                 ret.Add(tempvm);
             }
@@ -402,6 +446,7 @@ namespace Aurora.Models
             duedate = "";
             status = "";
             createdate = "";
+            isread = true;
         }
 
         public CoTopicVM(string id,string sub,string content,string crtor,string stat,string cdate)
@@ -436,6 +481,7 @@ namespace Aurora.Models
         public string duedate { set; get; }
         public string status { set; get; }
         public string createdate { set; get; }
+        public bool isread { set; get; }
 
         private List<string> prelatedpp = new List<string>();
         public List<string> relatedpeople {

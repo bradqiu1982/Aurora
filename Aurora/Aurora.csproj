@@ -644,6 +644,7 @@
     <Content Include="Scripts\intro\introjs-rtl.min.css" />
     <Content Include="Scripts\intro\introjs.min.css" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-autocomplete\jquery.auto-complete.css" />
     <Content Include="Scripts\jquery-autocomplete\jquery.auto-complete.js" />

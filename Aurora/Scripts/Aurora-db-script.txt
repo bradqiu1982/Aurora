@@ -23,7 +23,9 @@ CREATE TABLE [dbo].[auroratopicpj] (
 
 CREATE TABLE [dbo].[auroratopicpeople] (
     [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
-    [people]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+    [people]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[IsRead]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[owner]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
 );
 
 

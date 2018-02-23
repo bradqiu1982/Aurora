@@ -28,8 +28,18 @@ namespace Aurora.Controllers
         {
             string IP = Request.UserHostName;
             var compName = DetermineCompName(IP);
-            ViewBag.compName = compName;
+            ViewBag.compName = compName.ToUpper();
             var glbcfg = CfgUtility.GetSysConfig(this);
+
+            var usermap = MachineUserMap.RetrieveUserMap();
+            foreach (var item in usermap)
+            {
+                if (!glbcfg.ContainsKey(item.machine))
+                {
+                    glbcfg.Add(item.machine,item.username);
+                }
+            }
+
             if (glbcfg.ContainsKey(ViewBag.compName))
             {
                 ViewBag.username = glbcfg[ViewBag.compName].Trim().ToUpper();
@@ -96,6 +106,11 @@ namespace Aurora.Controllers
                 }
             }
 
+            if (!string.IsNullOrEmpty(ViewBag.ActiveTopicid))
+            {
+                CoTopicVM.UpdateTopicIsRead(ViewBag.ActiveTopicid, ViewBag.username, true);
+            }
+
             return View();
         }
 
@@ -106,8 +121,9 @@ namespace Aurora.Controllers
 
         public JsonResult UpdateMachineUserName()
         {
-
-
+            UserAuth();
+            var username = Request.Form["username"].ToUpper().Trim();
+            MachineUserMap.UpdateMachineUserMap(ViewBag.compName, username);
             var ret = new JsonResult();
             ret.Data = new { sucess = true };
             return ret;
@@ -159,6 +175,7 @@ namespace Aurora.Controllers
                 var topiccontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
                 var subject = Request.Form["subject"];
                 CoTopicVM.AddNewTopic(topicid,subject, topiccontent, ViewBag.username, ViewBag.compName);
+                CoTopicVM.UpdateTopicIsRead(topicid, false);
             }
 
             return RedirectToAction("Home", "CoWork");
@@ -194,14 +211,19 @@ namespace Aurora.Controllers
 
         public JsonResult NewTopicPeople()
         {
+            UserAuth();
             var topicid = Request.Form["topicid"];
             var pps = Request.Form["pps"];
             var splitstrs = pps.Split(new string[] { " @" }, StringSplitOptions.RemoveEmptyEntries);
             var pplist = new List<string>();
-            foreach (var pj in splitstrs)
+            foreach (var PP in splitstrs)
             {
-                pplist.Add(pj.Replace("@", "").Trim());
+                if (PP.ToUpper().Contains(ViewBag.username.ToUpper()))
+                { continue; }
+
+                pplist.Add(PP.Replace("@", "").Trim());
             }
+
             CoTopicVM.UpdateTopicPeople(topicid, pplist, this);
 
             var ret = new JsonResult();
@@ -222,7 +244,10 @@ namespace Aurora.Controllers
                 var commentid = CoTopicVM.GetUniqKey();
 
                 TopicCommentVM.AddComment(activetopicid, commentid, commentcontent, ViewBag.username, commenttime);
+                CoTopicVM.UpdateTopicIsRead(activetopicid, false);
             }
+
+            
 
             var routedict = new RouteValueDictionary();
             routedict.Add("activenavitem", activenavitem);
@@ -286,6 +311,8 @@ namespace Aurora.Controllers
             {
                 CoTopicVM.UpdateTopic(activetopicid, tcontent);
             }
+
+            CoTopicVM.UpdateTopicIsRead(activetopicid, false);
 
             var routedict = new RouteValueDictionary();
             routedict.Add("activenavitem", activenavitem);
