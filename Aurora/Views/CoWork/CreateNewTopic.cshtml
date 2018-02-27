@@ -149,8 +149,15 @@
                         <div class="col-lg-3">
                             <label style="font-size:16px">Due Date</label>
                         </div>
-                        <div class="col-lg-4">
-                            <input class="form-control" id="duedate" name="duedate">
+                        <div class="col-lg-5">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd">
+                                <input type="text" class="form-control" id="duedate" name="duedate" readonly>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </span>
+                            </div>
+                            
+                            @*<input class="form-control" id="duedate" name="duedate">*@
                         </div>
                         <div class="col-lg-2">
                         </div>
@@ -214,11 +221,9 @@
                 $('#mainduedatemodal').modal('hide');
             }
             $(function () {
-                $('#duedate').datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: 'yy-mm-dd'
-                });
+                $('.date').datepicker({
+                    autoclose: true
+                }); 
             });
     </script>
 </div>

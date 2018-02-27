@@ -56,7 +56,7 @@
     </nav>
 
     <div class="col-sm-9 create-editor-div">
-        @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("ModifyTopicPost", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
