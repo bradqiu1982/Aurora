@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[auroratopicduedate] (
 
 CREATE TABLE [dbo].[auroratopicpj] (
     [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
-	[project]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[project]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
 	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
 	[updater]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
     [updatetime] DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
@@ -30,7 +30,7 @@ CREATE TABLE [dbo].[auroratopicpeople] (
 
 
 CREATE TABLE [dbo].[auroranewpj] (
-    [project]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+    [project]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL
 );
 
 CREATE TABLE [dbo].[auroranewpeople] (

@@ -11,21 +11,19 @@ CKEDITOR.editorConfig = function( config ) {
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-		//{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
-        { name: 'insert',groups: [ 'insert' ]},
+        { name: 'insert'},
 		//{ name: 'forms' },
 		{ name: 'tools' },
-        
-		//{ name: 'document',	   groups: [ 'mode' ] },
+		{ name: 'document',	   groups: [ 'mode' ] },
 		//{ name: 'others' },
-		
+		//'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-        '/',
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
         { name: 'styles' },
 		{ name: 'colors' },
-		//{ name: 'about' }
+		{ name: 'about' }
     ];
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
@@ -41,7 +39,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.pasteFromWordRemoveFontStyles = false;
     config.ForcePasteAsPlainText = false;
     config.image_previewText = '';
-    config.filebrowserUploadUrl = '/userfiles/Upload.ashx?command=QuickUpload';
-
+    config.filebrowserUploadUrl = '/userfiles/Upload.ashx?command=QuickUpload'
 };
  

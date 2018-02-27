@@ -19,14 +19,14 @@
     </script>
 
 
-    <div style='height:28px;width:60px;border-radius: 5px;position:fixed;top:60px;right:30px;z-index:1009; border: 1px dashed grey; border-image: none;text-align:center;cursor:pointer;' data-toggle="tooltip" data-placement="center" title="Create New Topic" onclick="createnewtopic()">
+    @*<div style='height:28px;width:60px;border-radius: 5px;position:fixed;top:60px;right:30px;z-index:1009; border: 1px dashed grey; border-image: none;text-align:center;cursor:pointer;' data-toggle="tooltip" data-placement="center" title="Create New Topic" onclick="createnewtopic()">
         <span class="glyphicon glyphicon-plus" style="color:lime;font-size:24px;"></span>
         <script type="text/javascript">
         function createnewtopic() {
             window.location.href = '/CoWork/CreateNewTopic'
         }
         </script>
-    </div>
+    </div>*@
 
 
     <div class="newcontainer">
@@ -56,6 +56,20 @@
         </nav>
 
         <div class="col-sm-3 item-panels" style="padding-left:8px;padding-right:8px;">
+            <div class="item-panel-toolbar">
+                <div class="create-topic" data-toggle="tooltip" title="Add Topic">
+                    <a href="/CoWork/CreateNewTopic"><img class="toolbar-img" src="~/Content/images/add_column.png"></a>
+                </div>
+                <div class="search-topic">
+                    <div class="search-input">
+                        <input type="text" class="search-keywords hide" id="keywords" name="keywords" placeholder="Search for ...">
+                    </div>
+                    <div class="search-img">
+                        <img class="toolbar-img" src="~/Content/images/search.png">
+                    </div>
+                </div>
+            </div>
+
             @foreach (var item in ViewBag.topiclist)
             {
                 var pjworklistcount = item.ProjectWorkingList.Count;

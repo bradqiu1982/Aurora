@@ -24,6 +24,14 @@ namespace Aurora.Models
         public static string IAssign = "I-Assign";
         public static string IRelated = "I-Related";
         public static string Completed = "Completed";
+        public static string ICreate = "I-Create";
+        public static string IModify = "I-Modify";
+    }
+
+    public class EVENTWARNINGCLOCK {
+        public static string EVERYMONTH = "WARNING EVERY MONTH";
+        public static string EVERYDAY = "WARNING EVERY DAY AFTER DUE DATE";
+        public static string EVERYWEEK = "WARNING EVERY WEEK AFTER DUE DATE";
     }
 
     public class SeverHtmlDecode

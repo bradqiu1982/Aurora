@@ -160,6 +160,11 @@ namespace Aurora.Controllers
             pjlist.AddRange(CfgUtility.GetPJList(this));
             ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
             ViewBag.TopicId = CoTopicVM.GetUniqKey();
+
+            var tempnavlist = new List<string>();
+            tempnavlist.AddRange(new string[] {TopicBelongType.ICreate, TopicBelongType.IAssign, TopicBelongType.IRelated, TopicBelongType.Completed });
+            ViewBag.NavList = tempnavlist;
+
             return View();
         }
 
@@ -257,6 +262,10 @@ namespace Aurora.Controllers
 
         public ActionResult ModifyTopic(string activenavitem, string topicid, string commentid)
         {
+            var tempnavlist = new List<string>();
+            tempnavlist.AddRange(new string[] { TopicBelongType.IModify, TopicBelongType.IAssign, TopicBelongType.IRelated, TopicBelongType.Completed });
+            ViewBag.NavList = tempnavlist;
+
             if (!string.IsNullOrEmpty(topicid) && !string.IsNullOrEmpty(commentid))
             {
                 ViewBag.activenavitem = activenavitem;

@@ -2,6 +2,12 @@
 @{
     ViewBag.Title = "CreateNewTopic";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var iconarray = new List<string>();
+    iconarray.Add("glyphicon-plus");
+    iconarray.Add("glyphicon-star");
+    iconarray.Add("glyphicon-th-list");
+    iconarray.Add("glyphicon-blackboard");
+    var idx = 0;
 }
 
 
@@ -18,8 +24,39 @@
 
     <div class="newcontainer">
         <hr style="color:grey;margin-top:1px;margin-bottom:1px;border: 1px solid;border-color:grey" />
-        <div class="createeditor-div">
-        @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        <nav class="col-sm-2 nav-sidebar">
+            <ul class="nav">
+                <li class="cursor-pointer nav-sidebar-icon">
+                    <span class="glyphicon glyphicon-menu-hamburger sidebar-show"></span>
+                </li>
+                @foreach (var item in ViewBag.NavList)
+                {
+                    if (idx == 0)
+                    {
+                        <li class="activenavitem active" navid="@item">
+                            <a href="/CoWork/CreateNewTopic">
+                                <span class="glyphicon @(iconarray[idx%4])" data-toggle="tooltip" title="@item"></span>
+                                <span class="item-show">@item</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li navid="@item">
+                            <a href="/CoWork/Home?activenavitem=@item">
+                                <span class="glyphicon @(iconarray[idx%4])" data-toggle="tooltip" title="@item"></span>
+                                <span class="item-show">@item</span>
+                            </a>
+                        </li>
+                    }
+
+                    idx = idx + 1;
+                }
+            </ul>
+        </nav>
+
+        <div class="col-sm-9 create-editor-div">
+        @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data",id = "topiceditorform",name= "topiceditorform" }))
         {
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -31,27 +68,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="maineditor-op">
-                    <span class="glyphicon glyphicon-time maineditor-time" data-toggle="tooltip" title="choose due date" style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-user maineditor-people" data-toggle="tooltip" title="choose people" style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-tasks maineditor-proj" data-toggle="tooltip" title="choose projects" style="height:25px;width:25px;"></span>
-                    <span class="glyphicon glyphicon-paperclip maineditor-attach btn-file" data-toggle="tooltip" title="choose attachment" style="height:25px;width:25px;text-align:center;">
-                        <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
-                    </span>
-                </div>
-
                 <textarea name="JobTopicEditor" id="JobTopicEditor" rows="10" cols="80"></textarea>
                 <script>
-                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa' });
+                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa',height:'320px' });
                 </script>
-
             </div>
 
             <div class="form-group">
                 <div class="row">
 
                         <div class="col-xs-2">
-                            <input type="submit" class="form-control btn btn-success" value="Submit">
+                            <input type="button" id="topiceditorsubmit" name="topiceditorsubmit" class="form-control btn btn-success" value="Submit">
                         </div>
                         <div class="col-xs-10">
                             <input id="topicid" name="topicid" value="@ViewBag.TopicId" type="hidden">
@@ -87,6 +114,22 @@
             </div>
         }
         </div>
+        <div class="col-sm-1 create-tool-div">
+            <div class="create-tool-item maineditor-time" data-toggle="tooltip" title="Set Time">
+                <span class="glyphicon glyphicon-time maineditor-time-icon"></span>
+            </div>
+            <div class="create-tool-item maineditor-people" data-toggle="tooltip" title="Choose People">
+                <span class="glyphicon glyphicon-user maineditor-people-icon"></span>
+            </div>
+            <div class="create-tool-item maineditor-proj" data-toggle="tooltip" title="Add Events">
+                <span class="glyphicon glyphicon-tasks maineditor-proj-icon"></span>
+            </div>
+            <div class="create-tool-item maineditor-attach" data-toggle="tooltip" title="Add Attachment">
+                <span class="glyphicon glyphicon-paperclip maineditor-attach-icon btn-file" style="text-align:center;">
+                    <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
+                </span>
+            </div>
+        </div>
     </div>
 
 
@@ -94,19 +137,48 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="mainduedatemodalLabel">Choose Due Date</h4>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                <h4 class="modal-title" id="mainduedatemodalLabel">Set Time</h4>
             </div>
             <br>
             <div class="row">
                 <div class="bs-example" style="text-align:center">
-                    <div class="col-lg-1">
+                    <div class="row" style="text-align:left">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-3">
+                            <label style="font-size:16px">Due Date</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input class="form-control" id="duedate" name="duedate">
+                        </div>
+                        <div class="col-lg-2">
+                        </div>
                     </div>
-                    <div class="col-lg-4">
-                        <input class="form-control" id="duedate" name="duedate">
+                    <hr style="border-color:#efefef">
+                    <div class="row" style="text-align:left">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-3">
+                            <label style="font-size:16px">Warning Clock</label>
+                        </div>
+                        <div class="col-lg-4">
+                        </div>
+                        <div class="col-lg-2">
+                        </div>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="row" style="margin-top:10px;">
+                        <div style="margin-left:60px;text-align:left">
+                          <input type="radio" id="warning1" name="warning-clock" value="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYMONTH)"><label for="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYMONTH)">@(Aurora.Models.EVENTWARNINGCLOCK.EVERYMONTH)</label>
+                        </div>
+                        <div style="margin-left:60px;text-align:left">
+                            <input type="radio" id="warning1" name="warning-clock" value="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYDAY)"><label for="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYDAY)">@(Aurora.Models.EVENTWARNINGCLOCK.EVERYDAY)</label>
+                        </div>
+                        <div style="margin-left:60px;text-align:left">
+                            <input type="radio" id="warning1" name="warning-clock" value="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYWEEK)" title=""><label for="@(Aurora.Models.EVENTWARNINGCLOCK.EVERYWEEK)">@(Aurora.Models.EVENTWARNINGCLOCK.EVERYWEEK)</label>
+                        </div>
                     </div>
-                </div>
+                </div> 
             </div>
             <br>
             <div class="modal-footer">
@@ -119,21 +191,26 @@
             function doneduedate()
             {
                 $('#mainduedatemodal').modal('hide');
+                var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>Due Date:' + $('#duedate').val() + '</p>';
+                CKEDITOR.instances.JobTopicEditor.setData(wholeval);
 
-                var topicid = $('#topicid').val();
-                var duedate = $('#duedate').val();
-                $.post('/CoWork/NewTopicDueDate',
-                    {
-                        topicid:topicid,
-                        duedate:duedate
-                    },
-                    function(output){
-                        var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>Due Date:' + $('#duedate').val() + '</p>';
-                        CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-                    });
+                //var topicid = $('#topicid').val();
+                //var duedate = $('#duedate').val();
+                //$.post('/CoWork/NewTopicDueDate',
+                //    {
+                //        topicid:topicid,
+                //        duedate:duedate
+                //    },
+                //    function(output){
+                        
+                //    });
             }
             function cancelduedate() {
                 $('#duedate').val('');
+                if($('input[name=warning-clock]:checked').val())
+                {
+                    $('input[name=warning-clock]:checked').prop( "checked", false );
+                }
                 $('#mainduedatemodal').modal('hide');
             }
             $(function () {
@@ -150,6 +227,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
                 <h4 class="modal-title" id="relatedmodalLabel">Choose People</h4>
             </div>
             <br>
@@ -197,18 +275,19 @@
         function donechoosepeople()
         {
             $('#relatedmodal').modal('hide');
+            var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#towhoinput1').val() + '</p>';
+            CKEDITOR.instances.JobTopicEditor.setData(wholeval);
 
-            var topicid = $('#topicid').val();
-            var pps = $('#towhoinput1').val();
-            $.post('/CoWork/NewTopicPeople',
-                {
-                    topicid:topicid,
-                    pps:pps
-                },
-                function(output){
-                    var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#towhoinput1').val() + '</p>';
-                    CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-                });
+            //var topicid = $('#topicid').val();
+            //var pps = $('#towhoinput1').val();
+            //$.post('/CoWork/NewTopicPeople',
+            //    {
+            //        topicid:topicid,
+            //        pps:pps
+            //    },
+            //    function(output){
+
+            //    });
         }
 
         function cancelchoosepeople() {
@@ -235,89 +314,62 @@
 </div>
 
 
-<div class="modal" id="pjmodal" style="margin-top:12%" tabindex="-1" role="dialog" aria-labelledby="pjmodalLabel">
-    <div class="modal-dialog" role="document">
+<div id="add-event-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="pjmodalLabel">Choose Project</h4>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                <h4 class="modal-title">Add Event</h4>
             </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">PJ List</label>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-xs-2">Event List</label>
+                    <div class="col-xs-9 input-group">
+                        <input type="hidden" id="m-event-no" name="m-event-no" value="" />
+                        <input type="text" id="m-event" name="m-event" class="form-control" autocomplete="off" />
+                        <span class="input-group-addon m-confirm-edit">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </span>
+                    </div>
                 </div>
-                <div class="col-xs-8">
-                    <input class="form-control" id="choosepj" name="choosepj">
-                </div>
-                <div class="col-xs-1">
-                    <span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="pump2pjinput2()"></span>
-                </div>
-                <script type="text/javascript">
-                            function pump2pjinput(choosed)
-                            {
-                                $('#pjinput').val( $('#pjinput').val() + '#' + choosed + ' ');
-                                $('#choosepj').val('');
-                            }
-
-                            function pump2pjinput2()
-                            {
-                                $('#pjinput').val( $('#pjinput').val() + '#' + $('#choosepj').val() + ' ');
-                                $('#choosepj').val('');
-                            }
-                </script>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-3">
-                    <label class="control-label">PJ Input</label>
-                </div>
-                <div class="col-xs-9" data-toggle="tooltip" data-placement="center" title="Exampel: #project1 #project2 #project3...">
-                    <textarea class="form-control col-xs-12" name="pjinput" id="pjinput" style="height:100px;min-width:300px;"></textarea>
+                <div class="row row-margin-top">
+                    <label class="col-xs-2">Event Added</label>
+                    <div class="col-xs-9 n-row event-all">
+                            @*<div class="event-item">
+                                <div class="event-title">
+                                    <div class="event-no">1</div>
+                                    <div class="event-op">
+                                        <span class="glyphicon glyphicon-pencil m-event-edit" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-remove m-event-del" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="event-content">
+                                    Embedding YouTube videos in modals requires additional JavaScript not in Bootstrap to automatically stop playback and more. See this helpful Stack Overflow post for more information.Modals optional.
+                                </div>
+                            </div>*@
+                    </div>
                 </div>
             </div>
-            <br>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="cancelchoosepj()">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="donechoosepj()">Done</button>
+                <button type="button" class="btn btn-warning" id="m-cancel-addevent" name="m-cancel-addevent" onclick="canceladdingevent()">Cancel</button>
+                <button type="button" class="btn btn-success" id="m-addevent" name="m-addevent">Done</button>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        function donechoosepj()
-        {
-            $('#pjmodal').modal('hide');
-            var topicid = $('#topicid').val();
-            var pjs = $('#pjinput').val();
-            $.post('/CoWork/NewTopicPJ',
-                {
-                    topicid:topicid,
-                    pjs:pjs
-                },
-                function(){
-                    var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + '<p>' + $('#pjinput').val() + '</p>';
-                    CKEDITOR.instances.JobTopicEditor.setData(wholeval);
-                });
-
-        }
-        function cancelchoosepj() {
-            $('#pjinput').val('');
-            $('#pjmodal').modal('hide');
-        }
-
-        $('#choosepj').autoComplete({
-            minChars: 0,
-            source: function (term, suggest) {
-                term = term.toLowerCase();
-                var choices = @Html.Raw(ViewBag.PJList);
-                var suggestions = [];
-                for (i = 0; i < choices.length; i++)
-                    if (choices[i].toLowerCase().indexOf(term) >= 0) suggestions.push(choices[i]);
-                suggest(suggestions);
-            },
-            onSelect: function(event, term, item)	{
-                pump2pjinput(term);
-            }
-
-        });
-    </script>
 </div>
+
+<script type="text/javascript">
+
+
+    $('#m-event').autoComplete({
+        minChars: 0,
+        source: function (term, suggest) {
+            term = term.toLowerCase();
+            var choices = @Html.Raw(ViewBag.PJList);
+            var suggestions = [];
+            for (i = 0; i < choices.length; i++)
+                if (choices[i].toLowerCase().indexOf(term) >= 0) suggestions.push(choices[i]);
+            suggest(suggestions);
+        }
+    });
+</script>

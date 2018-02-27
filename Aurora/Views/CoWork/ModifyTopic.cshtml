@@ -2,6 +2,12 @@
 @{
     ViewBag.Title = "Modify Topic";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var iconarray = new List<string>();
+    iconarray.Add("glyphicon-pencil");
+    iconarray.Add("glyphicon-star");
+    iconarray.Add("glyphicon-th-list");
+    iconarray.Add("glyphicon-blackboard");
+    var idx = 0;
 }
 
 
@@ -18,25 +24,57 @@
 
 <div class="newcontainer">
     <hr style="color:grey;margin-top:1px;margin-bottom:1px;border: 1px solid;border-color:grey" />
-    <div class="createeditor-div">
+    <nav class="col-sm-2 nav-sidebar">
+        <ul class="nav">
+            <li class="cursor-pointer nav-sidebar-icon">
+                <span class="glyphicon glyphicon-menu-hamburger sidebar-show"></span>
+            </li>
+            @foreach (var item in ViewBag.NavList)
+            {
+                if (idx == 0)
+                {
+                    <li class="activenavitem active" navid="@item">
+                        <a href="">
+                            <span class="glyphicon @(iconarray[idx%4])" data-toggle="tooltip" title="@item"></span>
+                            <span class="item-show">@item</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li navid="@item">
+                        <a href="/CoWork/Home?activenavitem=@item">
+                            <span class="glyphicon @(iconarray[idx%4])" data-toggle="tooltip" title="@item"></span>
+                            <span class="item-show">@item</span>
+                        </a>
+                    </li>
+                }
+
+                idx = idx + 1;
+            }
+        </ul>
+    </nav>
+
+    <div class="col-sm-9 create-editor-div">
         @using (Html.BeginForm("NewTopic", "CoWork", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="form-group" style="padding-left:10%;padding-right:10%">
-                <div class="mdeditor-op">
+            <div class="form-group">
+
+                @*<div class="mdeditor-op">
                     <span class="glyphicon glyphicon-paperclip maineditor-attach btn-file" data-toggle="tooltip" title="choose attachment" style="height:40px;width:40px;text-align:center;font-weight:bold;font-size:28px;">
                         <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
                     </span>
-                </div>
-                <textarea name="JobTopicEditor" id="JobTopicEditor" rows="10" cols="80">@(ViewBag.tcontent)</textarea>
+                </div>*@
+                <textarea name="JobTopicEditor" id="JobTopicEditor" rows="50" cols="80">@(ViewBag.tcontent)</textarea>
                 <script>
-                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa' });
+                    CKEDITOR.replace('JobTopicEditor', { htmlEncodeOutput: true, skin: 'moono-lisa',height:'360px' });
                 </script>
 
             </div>
 
-            <div class="form-group" style="padding-left:10%;padding-right:10%">
+            <div class="form-group">
                 <div class="row">
 
                     <div class="col-xs-2">
@@ -78,6 +116,15 @@
             </div>
         }
     </div>
+
+    <div class="col-sm-1 create-tool-div">
+        <div class="create-tool-item maineditor-attach" data-toggle="tooltip" title="Add Attachment">
+            <span class="glyphicon glyphicon-paperclip maineditor-attach-icon btn-file" style="text-align:center;">
+                <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
+            </span>
+        </div>
+    </div>
+
 </div>
 
 
