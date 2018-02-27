@@ -117,6 +117,7 @@
 
         function submitevent()
         {
+            var topicid = $('#topicid').val();
             var eventcontents = new Array();
             $('.event-content').each(function () {
                 eventcontents.push($(this).html());
@@ -124,9 +125,10 @@
 
             if (eventcontents.length != 0)
             {
-                $.post('/CoWork/NewTopicPJ',
+                $.post('/CoWork/NewTopicEvent',
                     {
-                        eventcontent: JSON.stringify(eventcontents)
+                        topicid: topicid,
+                        eventcontents: JSON.stringify(eventcontents)
                     },
                     function (output) {});
             }

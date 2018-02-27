@@ -190,24 +190,21 @@ namespace Aurora.Controllers
         {
             var topicid = Request.Form["topicid"];
             var duedate = Request.Form["duedate"];
-            CoTopicVM.UpdateTopicDueDate(topicid, duedate);
+            var warningclock = Request.Form["warningclock"];
+            CoTopicVM.UpdateTopicDueDate(topicid, duedate, warningclock);
 
             var ret = new JsonResult();
             ret.Data = new { sucess = true };
             return ret;
         }
 
-        public JsonResult NewTopicPJ()
+        public JsonResult NewTopicEvent()
         {
             var topicid = Request.Form["topicid"];
-            var pjs = Request.Form["pjs"];
-            var splitstrs = pjs.Split(new string[] { " #" }, StringSplitOptions.RemoveEmptyEntries);
-            var pjlist = new List<string>();
-            foreach (var pj in splitstrs)
-            {
-                pjlist.Add(pj.Replace("#", "").Trim());
-            }
-            TopicProject.UpdateTopicPJ(topicid, pjlist, this);
+            var events = Request.Form["eventcontents"];
+            var eventlist = (List<string>)Newtonsoft.Json.JsonConvert.DeserializeObject(events, (new List<string>()).GetType());
+
+            TopicProject.UpdateTopicPJ(topicid, eventlist, this);
 
             var ret = new JsonResult();
             ret.Data = new { sucess = true };
@@ -223,7 +220,7 @@ namespace Aurora.Controllers
             var pplist = new List<string>();
             foreach (var PP in splitstrs)
             {
-                if (PP.ToUpper().Contains(ViewBag.username.ToUpper()))
+                if (PP.Trim().ToUpper().Contains(ViewBag.username.ToUpper()))
                 { continue; }
 
                 pplist.Add(PP.Replace("@", "").Trim());

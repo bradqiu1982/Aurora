@@ -34,6 +34,23 @@ namespace Aurora.Models
         public static string EVERYWEEK = "WARNING EVERY WEEK AFTER DUE DATE";
     }
 
+    public class EventTimer {
+        public EventTimer()
+        {
+            duedate = "";
+            warningclock = "";
+        }
+
+        public EventTimer(string dt, string wl)
+        {
+            duedate = dt;
+            warningclock = wl;
+        }
+
+        public string duedate { set; get; }
+        public string warningclock { set; get; }
+    }
+
     public class SeverHtmlDecode
     {
         private static string WriteBase64ImgFile(string commentcontent, Controller ctrl)
@@ -253,28 +270,31 @@ namespace Aurora.Models
             DBUtility.ExeLocalSqlNoRes(sql, param);
         }
 
-        public static void UpdateTopicDueDate(string topicid,string duedate)
+        public static void UpdateTopicDueDate(string topicid,string duedate,string warningclock)
         {
             var sql = "delete from auroratopicduedate where topicid = '<topicid>'";
             sql = sql.Replace("<topicid>", topicid);
             DBUtility.ExeLocalSqlNoRes(sql);
-            if (!string.IsNullOrEmpty(duedate))
-            {
-                sql = "insert into auroratopicduedate(topicid,duedate) values('<topicid>','<duedate>')";
-                sql = sql.Replace("<topicid>", topicid).Replace("<duedate>", duedate);
-                DBUtility.ExeLocalSqlNoRes(sql);
-            }
+
+            sql = "insert into auroratopicduedate(topicid,duedate,warningclock) values(@topicid,@duedate,@warningclock)";
+            var param = new Dictionary<string, string>();
+            param.Add("@topicid", topicid);
+            param.Add("@duedate", duedate);
+            param.Add("@warningclock", warningclock);
+            DBUtility.ExeLocalSqlNoRes(sql,param);
+
         }
 
-        public static string RetrieveTopicDueDate(string topicid)
+        public static List<EventTimer> RetrieveTopicDueDate(string topicid)
         {
-            var ret = "";
-            var sql = "select duedate from auroratopicduedate where topicid = '<topicid>'";
+            var ret = new List<EventTimer>();
+
+            var sql = "select duedate,warningclock from auroratopicduedate where topicid = '<topicid>'";
             sql = sql.Replace("<topicid>", topicid);
             var dbret = DBUtility.ExeLocalSqlWithRes(sql);
             foreach (var line in dbret)
             {
-                ret = Convert.ToDateTime(line[0]).ToString("yyyy-MM-dd");
+                ret.Add(new EventTimer(Convert.ToString(line[0]),Convert.ToString(line[1])));
             }
             return ret;
         }
@@ -299,9 +319,11 @@ namespace Aurora.Models
 
             foreach (var p in relatedPeople)
             {
-                sql = "insert into auroratopicpeople(topicid,people) values('<topicid>','<people>')";
-                sql = sql.Replace("<topicid>", topicid).Replace("<people>", p);
-                DBUtility.ExeLocalSqlNoRes(sql);
+                sql = "insert into auroratopicpeople(topicid,people) values(@topicid,@people)";
+                var param = new Dictionary<string, string>();
+                param.Add("@topicid", topicid);
+                param.Add("@people", p);
+                DBUtility.ExeLocalSqlNoRes(sql, param);
             }
 
             var pdict = CfgUtility.GetEmployeeDict(ctrl);
@@ -388,7 +410,7 @@ namespace Aurora.Models
                 var tempvm = new CoTopicVM(Convert.ToString(line[0]), Convert.ToString(line[1]), "", Convert.ToString(line[2])
                     , Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss"));
 
-                tempvm.duedate = RetrieveTopicDueDate(tempvm.topicid);
+                tempvm.eventtimelist = RetrieveTopicDueDate(tempvm.topicid);
                 tempvm.ProjectWorkingList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Working);
                 tempvm.ProjectDoneList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Done);
                 if (topicreaddict.ContainsKey(tempvm.topicid))
@@ -434,7 +456,7 @@ namespace Aurora.Models
                 var tempvm = new CoTopicVM(Convert.ToString(line[0]), Convert.ToString(line[1]), imgresize, Convert.ToString(line[2])
                     , Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss"));
 
-                tempvm.duedate = RetrieveTopicDueDate(tempvm.topicid);
+                tempvm.eventtimelist = RetrieveTopicDueDate(tempvm.topicid);
                 tempvm.ProjectWorkingList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Working);
                 tempvm.ProjectDoneList = TopicProject.RetrieveTopicPJ(tempvm.topicid, TopicPJStatus.Done);
                 tempvm.CommentList = TopicCommentVM.RetrieveComment(tempvm.topicid);
@@ -451,7 +473,6 @@ namespace Aurora.Models
             subject = "";
             topiccontent = "";
             creator = "";
-            duedate = "";
             status = "";
             createdate = "";
             isread = true;
@@ -463,7 +484,6 @@ namespace Aurora.Models
             subject = sub;
             topiccontent = content;
             creator = crtor;
-            duedate = "";
             status = stat;
             createdate = cdate;
         }
@@ -486,6 +506,14 @@ namespace Aurora.Models
         public string subject { set; get; }
         public string topiccontent { set; get; }
         public string creator { set; get; }
+
+        private List<EventTimer> evtlist = new List<EventTimer>();
+        public List<EventTimer> eventtimelist {
+            set { evtlist.Clear();
+                evtlist.AddRange(value);
+            }
+            get { return evtlist; }
+        }
         public string duedate { set; get; }
         public string status { set; get; }
         public string createdate { set; get; }
@@ -557,26 +585,29 @@ namespace Aurora.Models
 
             foreach (var pj in pjlist)
             {
-                sql = "insert into auroratopicpj(topicid,project,status,updatetime) values('<topicid>',N'<project>','<status>','<updatetime>')";
-                sql = sql.Replace("<topicid>", topicid).Replace("<project>", pj)
-                    .Replace("<status>", TopicPJStatus.Working).Replace("<updatetime>",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                DBUtility.ExeLocalSqlNoRes(sql);
+                sql = "insert into auroratopicpj(topicid,project,status,updatetime) values(@topicid,@project,@status,@updatetime)";
+                var param = new Dictionary<string, string>();
+                param.Add("@topicid",topicid);
+                param.Add("@project",pj);
+                param.Add("@status",TopicPJStatus.Working);
+                param.Add("@updatetime",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                DBUtility.ExeLocalSqlNoRes(sql,param);
             }
 
-            var pjdict = CfgUtility.GetPJDict(ctrl);
-            foreach (var pj in pjlist)
-            {
-                if (!pjdict.ContainsKey(pj))
-                {
-                    sql = "delete from auroranewpj where project = '<project>'";
-                    sql = sql.Replace("<project>", pj);
-                    DBUtility.ExeLocalSqlNoRes(sql);
+            //var pjdict = CfgUtility.GetPJDict(ctrl);
+            //foreach (var pj in pjlist)
+            //{
+            //    if (!pjdict.ContainsKey(pj))
+            //    {
+            //        sql = "delete from auroranewpj where project = '<project>'";
+            //        sql = sql.Replace("<project>", pj);
+            //        DBUtility.ExeLocalSqlNoRes(sql);
 
-                    sql = "insert into auroranewpj(project) values('<project>')";
-                    sql = sql.Replace("<project>", pj);
-                    DBUtility.ExeLocalSqlNoRes(sql);
-                }
-            }
+            //        sql = "insert into auroranewpj(project) values('<project>')";
+            //        sql = sql.Replace("<project>", pj);
+            //        DBUtility.ExeLocalSqlNoRes(sql);
+            //    }
+            //}
         }
 
         public static List<TopicProject> RetrieveTopicPJ(string topicid, string status)

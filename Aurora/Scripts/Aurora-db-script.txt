@@ -10,7 +10,8 @@ CREATE TABLE [dbo].[UserCustomizeTheme](
 
 CREATE TABLE [dbo].[auroratopicduedate] (
     [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
-    [duedate] DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
+    [duedate]    NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[warningclock]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
 );
 
 CREATE TABLE [dbo].[auroratopicpj] (
