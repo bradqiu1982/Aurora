@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[auroratopicduedate] (
 
 CREATE TABLE [dbo].[auroratopicpj] (
     [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[eventid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
 	[project]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
 	[status]   NVARCHAR (64)   DEFAULT ('')  NOT NULL,
 	[updater]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,

@@ -754,7 +754,7 @@ $(function () {
 
                                 if (me.$globalOptions.actions.move) {
                                      $.ajax(me.$globalOptions.actions.move, {
-                                         data: 'masterid=' + $('#masterid').val() + '&slaveid=' + item.id,
+                                         data: 'eventid=' + item.id,
                                         method: 'POST',
                                         cache: false
                                     });

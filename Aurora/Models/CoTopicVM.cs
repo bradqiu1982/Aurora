@@ -270,6 +270,23 @@ namespace Aurora.Models
             DBUtility.ExeLocalSqlNoRes(sql, param);
         }
 
+        public static void UpdateTopicStatus(string tid, string stat)
+        {
+            var sql = "update CoTopicVM set status = @status where topicid = @topicid";
+            var param = new Dictionary<string, string>();
+            param.Add("@topicid", tid);
+            param.Add("@status", stat);
+            DBUtility.ExeLocalSqlNoRes(sql, param);
+        }
+
+        public static void RemoveTopic(string topicid)
+        {
+            var sql = "update CoTopicVM set Removed = 'TRUE' where topicid = @topicid";
+            var param = new Dictionary<string, string>();
+            param.Add("@topicid", topicid);
+            DBUtility.ExeLocalSqlNoRes(sql, param);
+        }
+
         public static void UpdateTopicDueDate(string topicid,string duedate,string warningclock)
         {
             var sql = "delete from auroratopicduedate where topicid = '<topicid>'";
@@ -566,15 +583,17 @@ namespace Aurora.Models
             status = "";
             updater = "";
             updatedate = "";
+            eventid = "";
         }
 
-        public TopicProject(string id, string pj, string stat, string up, string uptime)
+        public TopicProject(string id,string eid, string pj, string stat, string up, string uptime)
         {
             topicid = id;
             project = pj;
             status = stat;
             updater = up;
             updatedate = uptime;
+            eventid = eid;
         }
 
         public static void UpdateTopicPJ(string topicid, List<string> pjlist, Controller ctrl)
@@ -585,9 +604,10 @@ namespace Aurora.Models
 
             foreach (var pj in pjlist)
             {
-                sql = "insert into auroratopicpj(topicid,project,status,updatetime) values(@topicid,@project,@status,@updatetime)";
+                sql = "insert into auroratopicpj(topicid,eventid,project,status,updatetime) values(@topicid,@eventid,@project,@status,@updatetime)";
                 var param = new Dictionary<string, string>();
                 param.Add("@topicid",topicid);
+                param.Add("@eventid", CoTopicVM.GetUniqKey());
                 param.Add("@project",pj);
                 param.Add("@status",TopicPJStatus.Working);
                 param.Add("@updatetime",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -610,21 +630,71 @@ namespace Aurora.Models
             //}
         }
 
+        //private static void updateeventid(string topicid, string project, string eventid)
+        //{
+        //    var sql = "update auroratopicpj set eventid = @eventid where topicid=@topicid and project=@project";
+        //    var param = new Dictionary<string, string>();
+        //    param.Add("@topicid", topicid);
+        //    param.Add("@eventid", eventid);
+        //    param.Add("@project", project);
+        //    DBUtility.ExeLocalSqlNoRes(sql, param);
+        //}
+
+        public static void updateeventstatusByEventID(string eventid,string username)
+        {
+            var status = TopicPJStatus.Working;
+            var sql = "select status from auroratopicpj where eventid=@eventid";
+            var param = new Dictionary<string, string>();
+            param.Add("@eventid", eventid);
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql, param);
+            if (dbret.Count > 0)
+            {
+                var tempstatus = Convert.ToString(dbret[0][0]);
+                if (string.IsNullOrEmpty(tempstatus)
+                    || string.Compare(tempstatus, TopicPJStatus.Working) == 0)
+                {
+                    status = TopicPJStatus.Done;
+                }
+                else
+                {
+                    status = TopicPJStatus.Working;
+                }
+            }
+
+            sql = "update auroratopicpj set status=@status,updater=@updater,updatetime=@updatetime where eventid=@eventid";
+            param = new Dictionary<string, string>();
+            param.Add("@eventid", eventid);
+            param.Add("@status", status);
+            param.Add("@updater", username);
+            param.Add("@updatetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            DBUtility.ExeLocalSqlNoRes(sql, param);
+        }
+
+        public static void updateeventstatus(string topicid,string stat)
+        {
+            var sql = "update auroratopicpj set status = @status where topicid=@topicid";
+            var param = new Dictionary<string, string>();
+            param.Add("@topicid", topicid);
+            param.Add("@status", stat);
+            DBUtility.ExeLocalSqlNoRes(sql, param);
+        }
+
         public static List<TopicProject> RetrieveTopicPJ(string topicid, string status)
         {
             var ret = new List<TopicProject>();
-            var sql = "select topicid,project,status,updater,updatetime from auroratopicpj where topicid = '<topicid>' and status = '<status>'";
+            var sql = "select topicid,project,status,updater,updatetime,eventid from auroratopicpj where topicid = '<topicid>' and status = '<status>'";
             sql = sql.Replace("<topicid>", topicid).Replace("<status>", status);
             var dbret = DBUtility.ExeLocalSqlWithRes(sql);
             foreach (var line in dbret)
             {
-                ret.Add(new TopicProject(Convert.ToString(line[0]), Convert.ToString(line[1]), Convert.ToString(line[2])
+                ret.Add(new TopicProject(Convert.ToString(line[0]), Convert.ToString(line[5]), Convert.ToString(line[1]), Convert.ToString(line[2])
                     , Convert.ToString(line[3]), Convert.ToDateTime(line[4]).ToString("yyyy-MM-dd HH:mm:ss")));
             }
             return ret;
         }
 
         public string topicid { set; get; }
+        public string eventid { set; get; }
         public string project { set; get; }
         public string status { set; get; }
         public string updater { set; get; }

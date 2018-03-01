@@ -326,5 +326,98 @@ namespace Aurora.Controllers
             return RedirectToAction("Home", "CoWork", routedict);
         }
 
+        public JsonResult InitEventList(string topicid)
+        {
+
+            var WorkingList = new List<object>();
+            var DoneList = new List<object>();
+
+            var workinglist = TopicProject.RetrieveTopicPJ(topicid, TopicPJStatus.Working);
+            var donelist = TopicProject.RetrieveTopicPJ(topicid, TopicPJStatus.Done);
+
+            foreach (var item in workinglist)
+            {
+                WorkingList.Add(
+                    new
+                    {
+                        id = item.eventid,
+                        title = item.project,
+                        dueDate = ""
+                    }
+                );
+            }
+
+            foreach (var item in donelist)
+            {
+                DoneList.Add(
+                    new
+                    {
+                        id = item.eventid,
+                        title = item.project,
+                        dueDate = ""
+                    }
+                );
+            }
+
+            var alleventlist = new List<object>();
+            alleventlist.Add(
+                new
+                {
+                    id = "todolistid",
+                    title = "TodoList",
+                    defaultStyle = "lobilist-warning",
+                    controls = false,
+                    useCheckboxes = false,
+                    items = WorkingList
+                }
+            );
+            alleventlist.Add(
+                new
+                {
+                    id = "donelistid",
+                    title = "Done",
+                    defaultStyle = "lobilist-success",
+                    controls = false,
+                    useCheckboxes = false,
+                    items = DoneList
+                }
+            );
+
+            var res = new JsonResult();
+            res.Data = new { lists = alleventlist };
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return res;
+        }
+
+        public JsonResult MoveEventList()
+        {
+            UserAuth();
+            var eventid = Request.Form["eventid"];
+            TopicProject.updateeventstatusByEventID(eventid, ViewBag.username);
+            var res = new JsonResult();
+            res.Data = new { success = true };
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return res;
+        }
+
+        public JsonResult CompleteTopic()
+        {
+            var topicid = Request.Form["topicid"];
+            CoTopicVM.UpdateTopicStatus(topicid, TopicStatus.Done);
+            TopicProject.updateeventstatus(topicid, TopicPJStatus.Done);
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
+        }
+
+        public JsonResult RemoveTopic()
+        {
+            var topicid = Request.Form["topicid"];
+            CoTopicVM.RemoveTopic(topicid);
+            var ret = new JsonResult();
+            ret.Data = new { sucess = true };
+            return ret;
+        }
+
     }
 }

@@ -684,7 +684,7 @@
     <Content Include="Scripts\lobilist\dist\lobilist.css" />
     <Content Include="Scripts\lobilist\dist\lobilist.js" />
     <Content Include="Scripts\lobilist\dist\lobilist.min.css" />
-    <Content Include="Scripts\lobilist\dist\lobilist_tasklink.js" />
+    <Content Include="Scripts\lobilist\dist\lobilist_eventlist.js" />
     <Content Include="Scripts\lobilist\lib\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Scripts\lobilist\lib\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Scripts\lobilist\lib\bootstrap\css\bootstrap.css" />

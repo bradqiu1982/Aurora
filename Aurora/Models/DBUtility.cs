@@ -307,7 +307,7 @@ namespace Aurora.Models
             }
         }
 
-        public static List<List<object>> ExeLocalSqlWithRes(string sql)
+        public static List<List<object>> ExeLocalSqlWithRes(string sql, Dictionary<string, string> parameters = null)
         {
             var ret = new List<List<object>>();
             var conn = GetLocalConnector();
@@ -319,6 +319,18 @@ namespace Aurora.Models
 
                 var command = conn.CreateCommand();
                 command.CommandText = sql;
+                if (parameters != null)
+                {
+                    foreach (var param in parameters)
+                    {
+                        SqlParameter parameter = new SqlParameter();
+                        parameter.ParameterName = param.Key;
+                        parameter.SqlDbType = SqlDbType.NVarChar;
+                        parameter.Value = param.Value;
+                        command.Parameters.Add(parameter);
+                    }
+                }
+
                 sqlreader = command.ExecuteReader();
                 if (sqlreader.HasRows)
                 {

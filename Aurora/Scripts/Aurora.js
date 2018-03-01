@@ -251,6 +251,50 @@
                 $('.item-details-show').removeClass().addClass('item-details-show').addClass('col-sm-7');
             }
         })
+
+        $('body').on('click', '.home-event-item,.SetEventStatusMenu', function () {
+            var topicid = $(this).attr('topicid');
+            $('#demoparent').empty();
+            $('#demoparent').append('<div id="todo-lists-basic-demo"></div>');
+            $('#todo-lists-basic-demo').lobiList({
+                actions: {
+                    load: '/CoWork/InitEventList?topicid=' + topicid,
+                    move: '/CoWork/MoveEventList'
+                },
+                enableTodoRemove: false,
+                enableTodoEdit: false,
+                controls: []
+            });
+            $('#eventlistmodal').modal({ backdrop: 'static' });
+        })
+
+        $('body').on('click', '.CompleteTopicMenu', function () {
+            var topicid = $(this).attr('topicid');
+            if (confirm('Do you really want to close this topic ?')) {
+                $.post('/CoWork/CompleteTopic'
+                    , {
+                        topicid: topicid
+                    }
+                    , function (output) {
+                        var activenavitem = $('.activenavitem').attr("navid");
+                        window.location.href = '/CoWork/Home?activenavitem=' + activenavitem;
+                });
+            }
+        })
+        
+        $('body').on('click', '.RemoveTopicMenu', function () {
+            var topicid = $(this).attr('topicid');
+            if (confirm('Do you really want to remove this topic ?'))
+            {
+                $.post('/CoWork/RemoveTopic', {
+                    topicid: topicid
+                }, function (output) {
+                    var activenavitem = $('.activenavitem').attr("navid");
+                    window.location.href = '/CoWork/Home?activenavitem=' + activenavitem;
+                });
+            }
+        })
+
     };
 
     return {
