@@ -4,38 +4,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="Login-Modal">
-    <div class="Login-Content">
-        <div class="Login-Label">
-            <div class="Login-info-1">Welcome to Aurora system</div>
-            <div class="Login-info-2">To serve you better, Would you mind to input your email address?</div>
-        </div>
-        <div class="Login-Input-Area">
-            <input class="form-control Login-Input" id="username" name="username">
-            <span class="Login-Input-Fix">@@finisar.com</span>
-            <span class="Login-Input-EG">EG: Brad.Qiu@finisar.com</span>
-        </div>
-        <div class="Login-Submit">
-            <input class="btn btn-success" type="button" value="Submit" onclick="UpdateUserName()" />
-        </div>
+<div class="wel-container">
+    <div class="wel-bg">
+        <img src="~/Content/images/welcome.png" class="wel-bg-img" />
     </div>
-    <script type="text/javascript">
-            function UpdateUserName()
-            {
-                var username = $('.Login-Input').val();
-                if (username)
-                {
+    <div class="wel-body">
+        <div class="wel-title">Welcome to Aurora System</div>
+        <div class="wel-subtitle">To serve you better, Would you mind to input your email address?</div>
+        <div class="wel-op">
+            <div class="input-group">
+                <input type="text" class="form-control wel-input" id="username" name="username">
+                <span class="input-group-addon">@@Finisar.com</span>
+            </div>
+            <div class="wel-eg">
+                <span class="wel-eg-txt">EG. Brad.Qiu@Finisar.com</span>
+            </div>
+            <div class="wel-submit">
+                <input type="button" class="btn btn-success btn-wel-submit" value="Submit" onclick="UpdateUserName()" />
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#username').focus();
+            })
+            function UpdateUserName() {
+                var username = $('#username').val();
+                if (username) {
                     $.post('/CoWork/UpdateMachineUserName',
-                    {
-                        username: username
-                    },
-                    function (output) {
-                        window.location.href = '/Cowork/Home';
-                    });
+                        {
+                            username: username
+                        },
+                        function (output) {
+                            window.location.href = '/Cowork/Home';
+                        });
                 }
                 return false;
             }
-    </script>
-</div>
+        </script>
 
+    </div>
+
+</div>
 

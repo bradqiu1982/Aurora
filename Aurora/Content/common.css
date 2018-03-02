@@ -1,5 +1,4 @@
 html, body {
-    margin-top:10px;
     height: 100%;
     background-color: #fff;
 }
@@ -474,7 +473,7 @@ div[MYTP="orange"] {
 /* header */
 .logo {
     position: absolute;
-    margin-top: 0%;
+    top: 25px;
     height: 50px;
     background-image: url(./images/logo.png);
     background-repeat: no-repeat;
@@ -505,7 +504,7 @@ div[MYTP="orange"] {
 .user-info {
     float: right;
     color: #f0f0f0;
-    margin-top: 5px;
+    margin-top: 30px;
     margin-right: 30px;
     font-size:20px;
     font-weight:bold;
@@ -731,4 +730,73 @@ div[MYTP="orange"] {
 .m-event-edit, .m-event-del { 
     color: #337ab7; 
     cursor: pointer; 
-} 
+}
+
+.wel-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.wel-bg {
+    padding-top: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.wel-bg-img{
+    width: 100%;
+}
+
+.wel-body {
+    position: absolute;
+    top: 25%;
+    left: 15%;
+    right: 15%;
+    width: 70%;
+    color: #000;
+}
+
+.wel-title {
+    padding-top: 5%;
+    font-size: 48px;
+}
+
+.wel-subtitle {
+    padding-top: 5%;
+    font-size: 24px;
+}
+
+.wel-op{
+    padding-top: 2%;
+    width: 40%;
+}
+
+.wel-input{
+    height: 35px;
+    background-color: transparent;
+    color: #000;
+    border: #000 solid 1px;
+}
+
+.wel-eg {
+    padding-top: 2%;
+    font-size: 16px;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.wel-submit{
+    padding-top: 5%;
+    font-size: 35px;
+    width: 30%;
+}
+
+.btn-wel-submit{
+    width: 100%;
+}

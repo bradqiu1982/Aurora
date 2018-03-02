@@ -55,7 +55,7 @@ namespace Aurora.Controllers
         {
             UserAuth();
 
-            if (string.Compare(ViewBag.username,ViewBag.compName) == 0)
+            if (string.Compare(ViewBag.username, ViewBag.compName) == 0)
             {
                 return RedirectToAction("Welcome");
             }
@@ -259,6 +259,7 @@ namespace Aurora.Controllers
 
         public ActionResult ModifyTopic(string activenavitem, string topicid, string commentid)
         {
+            UserAuth();
             var tempnavlist = new List<string>();
             tempnavlist.AddRange(new string[] { TopicBelongType.IModify, TopicBelongType.IAssign, TopicBelongType.IRelated, TopicBelongType.Completed });
             ViewBag.NavList = tempnavlist;
