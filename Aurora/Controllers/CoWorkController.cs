@@ -51,7 +51,7 @@ namespace Aurora.Controllers
         }
 
         // GET: CoWork
-        public ActionResult Home(string activenavitem,string topicid)
+        public ActionResult Home(string activenavitem,string topicid,string searchkey)
         {
             UserAuth();
 
@@ -84,11 +84,11 @@ namespace Aurora.Controllers
 
             if (string.Compare(ViewBag.ActiveNav, TopicBelongType.Completed) == 0)
             {
-                ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username);
+                ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username, searchkey);
             }
             else
             {
-                ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav);
+                ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav,TopicStatus.Working,searchkey);
             }
 
             

@@ -295,6 +295,15 @@
             }
         })
 
+        $('body').on('click', '.search-img', function () {
+            var keywords = $.trim($('#keywords').val());
+            var activenavitem = $('.activenavitem').attr("navid");
+            if (keywords)
+            {
+                window.location.href = '/CoWork/Home?activenavitem=' + activenavitem + '&searchkey=' + keywords;
+            }
+        })
+        
     };
 
     return {

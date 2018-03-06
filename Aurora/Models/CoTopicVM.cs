@@ -405,7 +405,7 @@ namespace Aurora.Models
             return ret;
         }
 
-        public static List<CoTopicVM> RetrieveTopic4List(string username, string topicbelongtype,string status = "WORKING")
+        public static List<CoTopicVM> RetrieveTopic4List(string username, string topicbelongtype, string status, string searchkey = null)
         {
             var topicreaddict = RetrieveTopicIsRead(username);
 
@@ -413,15 +413,41 @@ namespace Aurora.Models
             var sql = "";
             if (string.Compare(topicbelongtype, TopicBelongType.IAssign) == 0)
             {
-                sql = "select topicid,subject,creator,status,createdate from CoTopicVM where creator = '<creator>' and status = '<status>' and Removed <> 'TRUE' order by createdate desc";
+                if (string.IsNullOrEmpty(searchkey))
+                {
+                    sql = "select topicid,subject,creator,status,createdate from CoTopicVM where creator = '<creator>' and status = '<status>' and Removed <> 'TRUE' order by createdate desc";
+                }
+                else
+                {
+                    sql = "select topicid,subject,creator,status,createdate from CoTopicVM where creator = '<creator>' and status = '<status>' and Removed <> 'TRUE' and subject like @subject order by createdate desc";
+                }
                 sql = sql.Replace("<creator>", username).Replace("<status>", status);
             }
             else
             {
-                sql = "select topicid,subject,creator,status,createdate from CoTopicVM where topicid in (select distinct topicid from auroratopicpeople where people = '<people>' and isowner <> 'TRUE') and status = '<status>' and Removed <> 'TRUE'  order by createdate desc";
+                if (string.IsNullOrEmpty(searchkey))
+                {
+                    sql = "select topicid,subject,creator,status,createdate from CoTopicVM where topicid in (select distinct topicid from auroratopicpeople where people = '<people>' and isowner <> 'TRUE') and status = '<status>' and Removed <> 'TRUE'  order by createdate desc";
+                }
+                else
+                {
+                    sql = "select topicid,subject,creator,status,createdate from CoTopicVM where topicid in (select distinct topicid from auroratopicpeople where people = '<people>' and isowner <> 'TRUE') and status = '<status>' and Removed <> 'TRUE'  and subject like @subject  order by createdate desc";
+                }
                 sql = sql.Replace("<people>", username).Replace("<status>", status);
             }
-            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+
+            var dbret = new List<List<object>>();
+            if (string.IsNullOrEmpty(searchkey))
+            {
+                dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            }
+            else
+            {
+                var param = new Dictionary<string, string>();
+                param.Add("@subject", "%" + searchkey + "%");
+                dbret = DBUtility.ExeLocalSqlWithRes(sql,param);
+            }
+                
             foreach (var line in dbret)
             {
                 var tempvm = new CoTopicVM(Convert.ToString(line[0]), Convert.ToString(line[1]), "", Convert.ToString(line[2])
@@ -441,10 +467,10 @@ namespace Aurora.Models
             return ret; 
         }
 
-        public static List<CoTopicVM> RetrieveCompleteTopic4List(string username)
+        public static List<CoTopicVM> RetrieveCompleteTopic4List(string username,string searchkey)
         {
-            var Iassignlist = RetrieveTopic4List(username, TopicBelongType.IAssign, TopicStatus.Done);
-            Iassignlist.AddRange(RetrieveTopic4List(username, TopicBelongType.IRelated, TopicStatus.Done));
+            var Iassignlist = RetrieveTopic4List(username, TopicBelongType.IAssign, TopicStatus.Done, searchkey);
+            Iassignlist.AddRange(RetrieveTopic4List(username, TopicBelongType.IRelated, TopicStatus.Done, searchkey));
             Iassignlist.Sort(delegate (CoTopicVM c1, CoTopicVM c2) {
                 var date1 = DateTime.Parse(c1.createdate);
                 var date2 = DateTime.Parse(c2.createdate);
