@@ -40,6 +40,12 @@
                 }
                 return false;
             }
+
+            $('body').on('keypress', '#username', function (e) {
+                if (e.keyCode == 13) {
+                   UpdateUserName(); 
+               }
+            })
         </script>
 
     </div>
