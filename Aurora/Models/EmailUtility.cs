@@ -17,30 +17,15 @@ namespace Aurora.Models
 {
     public class EmailUtility
     {
-
-        public static void SendAnURLEmail(string what, string urlstr, List<string> towho, Controller ctrl)
+        private static bool IsDebug()
         {
-            try
-            {
-                var routevalue = new RouteValueDictionary();
-                routevalue.Add("activenavitem", "ABC");
-                string scheme = ctrl.Url.RequestContext.HttpContext.Request.Url.Scheme;
-                string validatestr = ctrl.Url.Action("Home", "CoWork", routevalue, scheme);
-                var netcomputername = EmailUtility.RetrieveCurrentMachineName();
-                validatestr = validatestr.Replace("//localhost", "//" + netcomputername);
-
-
-                validatestr = validatestr.Split(new string[] { "/CoWork" }, StringSplitOptions.RemoveEmptyEntries)[0] + urlstr;
-                var content = what + "\r\n\r\n" + validatestr + "\r\n\r\n";
-
-                var toaddrs = new List<string>();
-                toaddrs.AddRange(towho);
-
-                EmailUtility.SendEmail(ctrl, "WUXI Engineering System", toaddrs, content);
-                new System.Threading.ManualResetEvent(false).WaitOne(20);
-            }
-            catch (Exception ex)
-            { }
+            bool debugging = false;
+            #if DEBUG
+                debugging = true;
+            #else
+                debugging = false;
+            #endif
+            return debugging;
         }
 
         public static bool IsEmaileValid(string emailaddress)
@@ -79,6 +64,9 @@ namespace Aurora.Models
 
         public static bool SendEmail(Controller ctrl, string title, List<string> tolist, string content, bool isHtml = true, string attachpath = null)
         {
+            //if (IsDebug())
+            //    return true;
+
             try
             {
                 var syscfgdict = CfgUtility.GetSysConfig(ctrl);

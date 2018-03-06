@@ -195,12 +195,42 @@ namespace Aurora.Controllers
             if (!string.IsNullOrEmpty(Request.Form["JobTopicEditor"]))
             {
                 var topiccontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
+                topiccontent = topiccontent.Replace("class=", "");
+
                 var subject = Request.Form["subject"];
                 CoTopicVM.AddNewTopic(topicid,subject, topiccontent, ViewBag.username, ViewBag.compName);
                 CoTopicVM.UpdateTopicIsRead(topicid, false);
+
+                var plist = CoTopicVM.RetrieveTopicPeoPleEmail(topicid);
+                SendAnURLEmail("<p>New topic is created:</p>" + topiccontent
+                    , "/CoWork/Home?topicid=" + topicid
+                    ,plist);
             }
 
             return RedirectToAction("Home", "CoWork");
+        }
+
+        private void SendAnURLEmail(string what, string urlstr, List<string> towho)
+        {
+            try
+            {
+                var routevalue = new RouteValueDictionary();
+                string scheme = Url.RequestContext.HttpContext.Request.Url.Scheme;
+                string validatestr = Url.Action("Welcome", "CoWork", routevalue, scheme);
+                var netcomputername = EmailUtility.RetrieveCurrentMachineName();
+                validatestr = validatestr.Replace("//localhost", "//" + netcomputername);
+
+                validatestr = validatestr.Split(new string[] { "/CoWork" }, StringSplitOptions.RemoveEmptyEntries)[0] + urlstr;
+                var content = what + "\r\n\r\n" + validatestr + "\r\n\r\n";
+
+                var toaddrs = new List<string>();
+                toaddrs.AddRange(towho);
+
+                EmailUtility.SendEmail(this, "WUXI Aurora System", toaddrs, content);
+                new System.Threading.ManualResetEvent(false).WaitOne(20);
+            }
+            catch (Exception ex)
+            { }
         }
 
         public JsonResult NewTopicDueDate()
@@ -257,6 +287,8 @@ namespace Aurora.Controllers
             var activetopicid = Request.Form["activetopicid"];
             var activenavitem = Request.Form["activenav"];
             var commentcontent = SeverHtmlDecode.Decode(this, Request.Form["CommentEditor"]);
+            commentcontent = commentcontent.Replace("class=", "");
+
             if (!string.IsNullOrEmpty(commentcontent))
             {
                 var commenttime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -326,6 +358,7 @@ namespace Aurora.Controllers
             var activetopicid = Request.Form["topicid"];
             var commentid = Request.Form["commentid"];
             var tcontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
+            tcontent = tcontent.Replace("class=", "");
 
             if (!string.IsNullOrEmpty(activetopicid) && !string.IsNullOrEmpty(commentid))
             {

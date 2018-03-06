@@ -382,6 +382,24 @@ namespace Aurora.Models
             }
        }
 
+        public static List<string> RetrieveTopicPeoPleEmail(string topicid)
+        {
+            var sql = "select people from auroratopicpeople where topicid = '<topicid>'";
+            sql = sql.Replace("<topicid>", topicid);
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            var ret = new List<string>();
+            foreach (var line in dbret)
+            {
+                var name = Convert.ToString(line[0]);
+                if (name.Contains("@"))
+                    ret.Add(name);
+                else
+                    ret.Add(name + "@FINISAR.COM");
+            }
+            return ret;
+        }
+
+
         public static void UpdateTopicIsRead(string topicid, string people, bool isread)
         {
             var IsRead = isread ? "TRUE" : "FALSE";
