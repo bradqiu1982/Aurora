@@ -261,6 +261,29 @@ namespace Aurora.Models
             DBUtility.ExeLocalSqlNoRes(sql);
         }
 
+        public static bool IsTopicOwner(string topicid, string username)
+        {
+            var sql = "select isowner from auroratopicpeople where topicid = '<topicid>' and people = '<people>'";
+            sql = sql.Replace("<topicid>", topicid).Replace("<people>", username);
+            var dbret = DBUtility.ExeLocalSqlWithRes(sql);
+            if (dbret.Count > 0)
+            {
+                if (string.Compare(Convert.ToString(dbret[0][0]), "TRUE", true) == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static void UpdateTopic(string tid, string cc)
         {
             var sql = "update CoTopicVM set topiccontent = @topiccontent where topicid = @topicid";

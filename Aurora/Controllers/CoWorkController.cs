@@ -69,36 +69,53 @@ namespace Aurora.Controllers
             pjlist.AddRange(CoTopicVM.GetNewPJList());
             pjlist.AddRange(CfgUtility.GetPJList(this));
             ViewBag.PJList = Newtonsoft.Json.JsonConvert.SerializeObject(pjlist.ToArray());
-            ViewBag.TopicId = CoTopicVM.GetUniqKey();
 
+            //nav list
             var tempnavlist = new List<string>();
             tempnavlist.AddRange(new string[] { TopicBelongType.IAssign, TopicBelongType.IRelated, TopicBelongType.Completed });
             ViewBag.NavList = tempnavlist;
-            if (string.IsNullOrEmpty(activenavitem)) 
-            {
-                ViewBag.ActiveNav = tempnavlist[0];
-            }
-            else {
-                ViewBag.ActiveNav = activenavitem;
-            }
 
-            if (string.Compare(ViewBag.ActiveNav, TopicBelongType.Completed) == 0)
-            {
-                ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username, searchkey);
-            }
-            else
-            {
-                ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav,TopicStatus.Working,searchkey);
-            }
 
-            
             if (!string.IsNullOrEmpty(topicid))
             {
                 ViewBag.ActiveTopicid = topicid;
-                ViewBag.CurrentTopic = CoTopicVM.RetrieveTopic(ViewBag.ActiveTopicid);
+                List<CoTopicVM> CurrentTopic1 = CoTopicVM.RetrieveTopic(ViewBag.ActiveTopicid);
+                ViewBag.CurrentTopic = CurrentTopic1;
+
+                //query string only contains topicid
+                if (string.IsNullOrEmpty(activenavitem))
+                {
+                    //base on topic status decide the active nav
+                    if (string.Compare(CurrentTopic1[0].status, TopicStatus.Working) == 0) {
+                        if (CoTopicVM.IsTopicOwner(topicid, ViewBag.username))
+                            ViewBag.ActiveNav = TopicBelongType.IAssign;
+                        else
+                            ViewBag.ActiveNav = TopicBelongType.IRelated;
+                    }
+                    else
+                        ViewBag.ActiveNav = TopicBelongType.Completed;
+                }
+                else
+                    ViewBag.ActiveNav = activenavitem;
+
+                if (string.Compare(ViewBag.ActiveNav, TopicBelongType.Completed) == 0)
+                    ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username, searchkey);
+                else
+                    ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav,TopicStatus.Working,searchkey);
             }
             else
             {
+                if (string.IsNullOrEmpty(activenavitem))
+                    ViewBag.ActiveNav = tempnavlist[0];
+                else
+                    ViewBag.ActiveNav = activenavitem;
+
+                if (string.Compare(ViewBag.ActiveNav, TopicBelongType.Completed) == 0)
+                    ViewBag.topiclist = CoTopicVM.RetrieveCompleteTopic4List(ViewBag.username, searchkey);
+                else
+                    ViewBag.topiclist = CoTopicVM.RetrieveTopic4List(ViewBag.username, ViewBag.ActiveNav, TopicStatus.Working, searchkey);
+
+                //choose a default topic
                 if (ViewBag.topiclist.Count > 0)
                 {
                     ViewBag.ActiveTopicid = ViewBag.topiclist[0].topicid;
