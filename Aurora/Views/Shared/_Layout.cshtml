@@ -6,14 +6,8 @@
     <title>@ViewBag.Title - AURORA</title>
 
     @Styles.Render("~/Content/css")
-    @if (Session["utheme"] == null || Convert.ToInt32(Session["utheme"]) == Aurora.Models.Theme.Dark)
-    {
-        <link href="~/Content/common.css" rel="stylesheet" />
-    }
-    else
-    {
-        <link href="~/Content/lcommon.css" rel="stylesheet" />
-    }
+   
+    <link href="~/Content/common.css" rel="stylesheet" />
     <link href="~/Content/simplebar.css" rel="stylesheet" />
     <link href="@Url.Content("~/Content/jquery-ui.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.Content("~/Content/bootstrapfileinput.css")" rel="stylesheet" type="text/css" />
