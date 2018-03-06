@@ -178,6 +178,7 @@
     <Compile Include="Models\CfgUtility.cs" />
     <Compile Include="Models\CoTopicVM.cs" />
     <Compile Include="Models\DBUtility.cs" />
+    <Compile Include="Models\EmailUtility.cs" />
     <Compile Include="Models\MachineUserMap.cs" />
     <Compile Include="Models\TopicCommentVM.cs" />
     <Compile Include="Models\UserCustomizeThemeVM.cs" />

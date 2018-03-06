@@ -1,4 +1,8 @@
-﻿WUX-L80008501:::Shawn.Zhang
+﻿APPEMAILADRESS:::WXNPI.Trace@finisar.com
+APPEMAILPWD:::abc@12345
+EMAILSERVER:::wmail.finisar.com
+
+WUX-L80008501:::Shawn.Zhang
 SHG-L80004985:::Tony.Lv
 WUX-L80003350:::Rose.Wang
 SHG-L80003161:::Zhengwei.Kong
