@@ -195,14 +195,13 @@ namespace Aurora.Controllers
             if (!string.IsNullOrEmpty(Request.Form["JobTopicEditor"]))
             {
                 var topiccontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
-                topiccontent = topiccontent.Replace("class=", "");
 
                 var subject = Request.Form["subject"];
                 CoTopicVM.AddNewTopic(topicid,subject, topiccontent, ViewBag.username, ViewBag.compName);
                 CoTopicVM.UpdateTopicIsRead(topicid, false);
 
                 var plist = CoTopicVM.RetrieveTopicPeoPleEmail(topicid);
-                SendAnURLEmail("<p>New topic is created:</p>" + topiccontent
+                SendAnURLEmail("<p>New topic: "+ subject + "is created by "+ ViewBag.username + "</p>" + topiccontent
                     , "/CoWork/Home?topicid=" + topicid
                     ,plist);
             }
@@ -221,7 +220,7 @@ namespace Aurora.Controllers
                 validatestr = validatestr.Replace("//localhost", "//" + netcomputername);
 
                 validatestr = validatestr.Split(new string[] { "/CoWork" }, StringSplitOptions.RemoveEmptyEntries)[0] + urlstr;
-                var content = what + "\r\n\r\n" + validatestr + "\r\n\r\n";
+                var content = what + "<p>Topic Link: " + validatestr + "</p>";
 
                 var toaddrs = new List<string>();
                 toaddrs.AddRange(towho);
@@ -287,7 +286,6 @@ namespace Aurora.Controllers
             var activetopicid = Request.Form["activetopicid"];
             var activenavitem = Request.Form["activenav"];
             var commentcontent = SeverHtmlDecode.Decode(this, Request.Form["CommentEditor"]);
-            commentcontent = commentcontent.Replace("class=", "");
 
             if (!string.IsNullOrEmpty(commentcontent))
             {
@@ -358,7 +356,6 @@ namespace Aurora.Controllers
             var activetopicid = Request.Form["topicid"];
             var commentid = Request.Form["commentid"];
             var tcontent = SeverHtmlDecode.Decode(this, Request.Form["JobTopicEditor"]);
-            tcontent = tcontent.Replace("class=", "");
 
             if (!string.IsNullOrEmpty(activetopicid) && !string.IsNullOrEmpty(commentid))
             {

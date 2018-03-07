@@ -116,6 +116,8 @@ namespace Aurora.Models
         {
             var ret = ctrl.Server.HtmlDecode(src).Replace("border=\"0\"", "border=\"2\"");
             ret = ReplaceBase64data2File(ret, ctrl);
+            ret = System.Text.RegularExpressions.Regex.Replace(ret, "<div.*?>", string.Empty).Trim();
+            ret = ret.Replace("</div>", "");
             return ret;
         }
 
