@@ -71,3 +71,12 @@ CREATE TABLE [dbo].[aurorausermap] (
     [machine]   NVARCHAR (300)   DEFAULT ('')  NOT NULL,
     [username]   NVARCHAR (300)   DEFAULT ('')  NOT NULL
 );
+
+
+CREATE TABLE [dbo].[technicalvideo] (
+    [videoid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[hashcode]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+    [machine]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
+	[videopath]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
+	[updatedate]   DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
+);

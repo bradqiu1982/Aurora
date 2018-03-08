@@ -55,6 +55,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.VideoConverter, Version=1.1.2.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.VideoConverter.1.1.2\lib\net20\NReco.VideoConverter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -172,6 +176,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CoWorkController.cs" />
+    <Compile Include="Controllers\TechnicalVideoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -182,6 +187,7 @@
     <Compile Include="Models\MachineUserMap.cs" />
     <Compile Include="Models\TopicCommentVM.cs" />
     <Compile Include="Models\UserCustomizeThemeVM.cs" />
+    <Compile Include="Models\VideoVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -349,6 +355,17 @@
     <Content Include="ckeditor\plugins\forms\dialogs\textarea.js" />
     <Content Include="ckeditor\plugins\forms\dialogs\textfield.js" />
     <Content Include="ckeditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="ckeditor\plugins\html5video\dialogs\html5video.js" />
+    <Content Include="ckeditor\plugins\html5video\icons\html5video.png" />
+    <Content Include="ckeditor\plugins\html5video\lang\de.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\en.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\es.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\eu.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\fr.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\ru.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\uk.js" />
+    <Content Include="ckeditor\plugins\html5video\lang\uz.js" />
+    <Content Include="ckeditor\plugins\html5video\plugin.js" />
     <Content Include="ckeditor\plugins\icons.png" />
     <Content Include="ckeditor\plugins\icons_hidpi.png" />
     <Content Include="ckeditor\plugins\iframe\dialogs\iframe.js" />
@@ -713,6 +730,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\VideoRecorderJs-master\dist\recorderWorker.js" />
+    <Content Include="Scripts\VideoRecorderJs-master\dist\VideoRecorderJS.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -748,6 +767,7 @@
     <Content Include="Views\CoWork\CreateNewTopic.cshtml" />
     <Content Include="Views\CoWork\ModifyTopic.cshtml" />
     <Content Include="Views\CoWork\Welcome.cshtml" />
+    <Content Include="Views\TechnicalVideo\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
