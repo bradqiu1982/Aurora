@@ -169,7 +169,7 @@
             {
                 resize: 0.8, // recorded video dimentions are 0.4 times smaller than the original
                 webpquality: 0.5, // chrome and opera support webp imags, this is about the aulity of a frame
-                framerate: 15,  // recording frame rate
+                framerate: 30,  // recording frame rate
                 videotagid: "viredemovideoele",
                 videoWidth: "640",
                 videoHeight: "480",
@@ -227,8 +227,6 @@
 
     uploadrecording.addEventListener("click", function () {
         if (videoblob) {
-
-            alert('try to upload data');
 
             var fd = new FormData();
             fd.append('fname', 'myvideo.webm');
@@ -290,11 +288,21 @@
     var timerInterval = null;
     var videoblob = null;
 
+    function blobToFile(theBlob, fileName) {
+        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        theBlob.lastModifiedDate = new Date();
+        theBlob.name = fileName;
+        return theBlob;
+    }
+
     function oncaptureFinish(result) {
         //document.getElementById('status').innerHTML = "";
         result.forEach(function (item) {
             if (item.type == "video") {
                 videoblob = item.blob;
+                //videoblob = blobToFile(item.blob, 'myvideo.webm')
+                //videoblob = new File([item.blob], 'myvideo.webm', { type: item.blob.type, lastModified: Date.now() });
+                console.log(videoblob);
 
                 //var myReader = new FileReader();
                 //myReader.addEventListener("loadend", function () {

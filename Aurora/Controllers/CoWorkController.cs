@@ -501,13 +501,13 @@ namespace Aurora.Controllers
                     var ffMpeg2 = new NReco.VideoConverter.FFMpegConverter();
 
                     var setting = new NReco.VideoConverter.ConvertSettings();
-                    setting.VideoFrameRate = 24;
-                    setting.AudioSampleRate = 24;
+                    setting.VideoFrameRate = 30;
+                    setting.AudioSampleRate = 44100;
 
                     ffMpeg2.ConvertMedia(srcvfile, NReco.VideoConverter.Format.webm, mp4path, NReco.VideoConverter.Format.mp4,setting);
 
                     var url = "/userfiles/docs/" + datestring + "/" + mp4name;
-                    var videohtml = "<p><video width='640' height='480' controls src='" + url + ".mp4' type='video/mp4'>"
+                    var videohtml = "<p><video width='640' height='480' controls src='" + url + "' type='video/mp4'>"
                         + "Your browser does not support the video tag. </video></p>";
 
                     var ret1 = new JsonResult();
