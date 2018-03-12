@@ -732,6 +732,7 @@
     <Content Include="Scripts\lobilist\lib\lobibox\js\notifications.js" />
     <Content Include="Scripts\lobilist\lib\lobibox\js\notifications.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\MyVideoRecord.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\VideoRecorderJs-master\dist\recorderWorker.js" />
@@ -772,6 +773,7 @@
     <Content Include="Views\CoWork\ModifyTopic.cshtml" />
     <Content Include="Views\CoWork\Welcome.cshtml" />
     <Content Include="Views\TechnicalVideo\Home.cshtml" />
+    <Content Include="Views\Shared\_VideoRecordModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

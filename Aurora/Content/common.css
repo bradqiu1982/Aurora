@@ -114,6 +114,23 @@ div[MYTP="orange"] {
     color:#00B050;
 }
 
+.btn-video {
+    background-color:white;
+    border:1px solid #ccc;
+    padding:3px;
+}
+
+.btn-video:hover {
+    background-color:#efefef;
+}
+
+.home-video-icon{
+    /*margin-top:17px;*/
+    width:80px;
+    font-size:20px!important;
+    color:#00B050;
+}
+
 .home-tool-item {
     position:fixed;
     top:160px;
@@ -132,10 +149,28 @@ div[MYTP="orange"] {
     background-color:#efefef;
 }
 
+/*.home-tool-item2 {
+    position:fixed;
+    top:225px;
+    right:15px;
+    z-index:1009;
+    height: 60px;
+    width:60px;
+    border-radius:5px;
+    margin-top: 5px;
+    border: 2px #aaa solid;
+    cursor: pointer;
+    text-align:center;
+}
+
+.home-tool-item2:hover {
+    background-color:#efefef;
+}*/
+
 .home-proj-icon {
     margin-top:17px;
     font-size:24px!important;
-    color:#00B050;
+    color:#FF7400;
 }
 
 .nav-sidebar-narrow{

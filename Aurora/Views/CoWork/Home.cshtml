@@ -21,11 +21,14 @@
     <script src="../../ckeditor/ckeditor.js"></script>
     <script src="~/Scripts/Aurora.js" type="text/javascript"></script>
 
-
+<link href="~/Content/videorecorder.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/VideoRecorderJs-master/dist/VideoRecorderJS.min.js" type="text/javascript"></script>
+<script src="~/Scripts/MyVideoRecord.js" type="text/javascript"></script>
 
     <script type="text/javascript">
     $(function(){
         Aurora.mainpageinit();
+        MyVideoRecord.Init();
     })
     </script>
 
@@ -35,6 +38,10 @@
     <div class="home-tool-item home-event-item" topicid="@(ViewBag.ActiveTopicid)" data-toggle="tooltip" title="Set Events Status">
         <span class="glyphicon glyphicon-tasks home-proj-icon"></span>
     </div>
+    @*<div class="home-tool-item2 maineditor-video" data-toggle="tooltip" title="Record Video">
+        <span class="glyphicon glyphicon-facetime-video home-video-icon" style="text-align:center;">
+        </span>
+    </div>*@
 }
 
 
@@ -202,6 +209,7 @@
                                     <span class="btn btn-default btn-file" id="choosefile2">
                                         Editor Attachment <input class="btn-available" type="file" name="file1" id="file1" runat="server" onchange="ShowFileNamex(this)" />
                                     </span>
+                                    <button class="btn btn-video maineditor-video" type="button"><span class="glyphicon glyphicon-facetime-video home-video-icon" style="text-align:center;"></span></button>
                                     <input class="btn btn-success" type="button" value="Submit" onclick="CommitComment()">
                                     <input class="hide" id="activenav" name="activenav" type="text" value="">
                                     <input class="hide" id="activetopicid" name="activetopicid" value="@(crttopic.topicid)" type="text">
@@ -297,3 +305,44 @@
         }
     </script>
 </div>
+
+@Html.Partial("~/Views/Shared/_VideoRecordModal.cshtml")
+
+<script type="text/javascript">
+
+        $(function () {
+            $('body').on('click', '.m-video-upload', function () {
+                var videoblob = MyVideoRecord.GetVideoBlob();
+                var virec = MyVideoRecord.GetViRec();
+
+                if (videoblob) {
+                    var fd = new FormData();
+                    fd.append('fname', 'myvideo.webm');
+                    fd.append('data', videoblob);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CoWork/UploadVideoData',
+                        data: fd,
+                        processData: false,
+                        contentType: false
+                    }).done(function (output) {
+                        var wholeval = CKEDITOR.instances.CommentEditor.getData() + output.data;
+                        CKEDITOR.instances.CommentEditor.setData(wholeval);
+
+                        if (virec) {
+                            virec.clearRecording();
+                            MyVideoRecord.StopTheCountDown();
+                        }
+
+                        $('.mc-start').removeClass('hidden');
+                        $('#m-video-record').removeClass('hidden');
+                        $('#m-video-play').addClass('hidden');
+                        $('#m-video-play').attr('src', '');
+                        MyVideoRecord.SetViRec(null);
+                        $('#modal-video').modal('hide');
+                    });
+                }
+            })
+    })
+</script>
