@@ -108,6 +108,12 @@ div[MYTP="orange"] {
     color:#FA9604;
 }
 
+.maineditor-video-icon{
+    margin-top:18px;
+    font-size:32px!important;
+    color:#00B050;
+}
+
 .home-tool-item {
     position:fixed;
     top:160px;
@@ -801,3 +807,5 @@ div[MYTP="orange"] {
 .btn-wel-submit{
     width: 100%;
 }
+
+
