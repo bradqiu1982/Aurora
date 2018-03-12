@@ -609,11 +609,14 @@
     <Content Include="Content\bootstrapfileinput.css" />
     <Content Include="Content\common.css" />
     <Content Include="Content\images\add_column.png" />
+    <Content Include="Content\images\end.png" />
     <Content Include="Content\images\export.png" />
     <Content Include="Content\images\import.png" />
     <Content Include="Content\images\logo-bak.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\search.png" />
+    <Content Include="Content\images\start.png" />
+    <Content Include="Content\images\upload.png" />
     <Content Include="Content\images\welcome.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery.dataTables.min.css" />

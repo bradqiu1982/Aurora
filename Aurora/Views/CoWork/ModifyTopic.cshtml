@@ -18,6 +18,7 @@
 <script src="~/Scripts/jquery.base64.js" type="text/javascript"></script>
 
 <link href="~/Content/videorecorder.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/VideoRecorderJs-master/dist/VideoRecorderJS.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     $(function(){
@@ -132,51 +133,48 @@
         </div>
     </div>
 
+</div>
 
-
-    
-    <script src="~/Scripts/VideoRecorderJs-master/dist/VideoRecorderJS.min.js" type="text/javascript"></script>
-
-
-    <div id="modal-video" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog m-video" role="document">
-            <div class="modal-content">
-                <div class="modal-body m-video-body">
-                    <div class="m-video-header">
-                        <button type="button" class="video-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<div id="modal-video" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog m-video" role="document">
+        <div class="modal-content">
+            <div class="modal-body m-video-body">
+                <div class="m-video-header">
+                    <button type="button" class="video-close close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="m-video-container">
+                    <video id="m-video-record" class=""></video>
+                    <video id="m-video-play" class="hidden" controls></video>
+                </div>
+                <div class="m-video-footer">
+                    <div class="mc-start">
+                        <img src="~/Content/images/start.png" class="m-video-start m-video-op" data-val="start"/>
                     </div>
-                    <div class="m-video-container">
-                        <video id="m-video-record" class=""></video>
-                        <video id="m-video-play" class="hidden"></video>
+                    <div class="mc-end hidden">
+                        <img src="~/Content/images/end.png" class="m-video-end m-video-op" data-val="end"/>
+                        <label class="m-video-cntdown m-video-op" id="countdown">60</label>
                     </div>
-                    <div class="m-video-footer">
-                        <div class="mc-start">
-                            <label class="m-video-start m-video-op" data-val="start"></label>
-                        </div>
-                        <div class="mc-end hidden">
-                            <label class="m-video-end m-video-op" data-val="end"></label>
-                        </div>
-                        <div class="mc-play hidden">
-                            <span class="glyphicon glyphicon-play m-video-op" id="m-play" data-val="play"></span>
-                            <span class="glyphicon glyphicon-pause m-video-op hidden" id="m-pause" data-val="pause"></span>
-                            <span class="glyphicon glyphicon-upload m-video-op" id="m-upload" data-val="upload"></span>
-                        </div>
-                        <span style="font-size:20px;float:right" id="countdown"></span>
+                    <div class="mc-play hidden">
+                        @*<span class="glyphicon glyphicon-play m-video-op" id="m-play" data-val="play"></span>
+                        <span class="glyphicon glyphicon-pause m-video-op hidden" id="m-pause" data-val="pause"></span>*@
+                        <img src="~/Content/images/upload.png" class="m-video-upload m-video-op" id="m-upload" data-val="upload"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-    $(function(){
-        var virec = null;
-        var videoblob = null;
-        var countdowntime = 60;
-        var functioncalltime = 0;
-        var timerInterval = null;
+        $(function () {
+
+            var virec = null;
+            var videoblob = null;
+            var countdowntime = 60;
+            var functioncalltime = 0;
+            var timerInterval = null;
 
         $('body').on('click', '.maineditor-video', function () {
             $("#m-video-play").addClass('hidden');
@@ -226,6 +224,7 @@
             {
                 virec.clearRecording();
                 stopCountDown();
+                virec = null;
             }
         })
 
@@ -238,15 +237,18 @@
                  startCountDown();
                 $('.mc-end').removeClass('hidden');
             }
-            else if($(this).attr('data-val') == 'end'){
+            else if ($(this).attr('data-val') == 'end') {
+
+                $('#m-video-record').addClass('hidden');
+                $('#m-video-play').removeClass('hidden');
+
                 //stop record
                  virec.stopCapture(oncaptureFinish);
                  stopCountDown();
-                $('#m-video-record').addClass('hidden');
-                $('#m-video-play').removeClass('hidden');
-                $('.mc-play').removeClass('hidden');
-                $('#m-play').removeClass('hidden');
-                $('#m-pause').addClass('hidden');
+
+                 $('.mc-play').removeClass('hidden');
+                //$('#m-play').removeClass('hidden');
+                //$('#m-pause').addClass('hidden');
             }
             else if($(this).attr('data-val') == 'upload'){
                 //upload record
@@ -275,66 +277,50 @@
                         $('#m-video-record').removeClass('hidden');
                         $('#m-video-play').addClass('hidden');
                         $('#m-video-play').attr('src', '');
+                        virec = null;
                     });
                 }
 
             }
-            else if($(this).attr('data-val') == 'play'){
-                //play record
-                $('.mc-play').removeClass('hidden');
-                $('#m-play').addClass('hidden');
-                $('#m-pause').removeClass('hidden');
-                virec.play();
-            }
-            else if($(this).attr('data-val') == 'pause'){
-                $('.mc-play').removeClass('hidden');
-                $('#m-play').removeClass('hidden');
-                $('#m-pause').addClass('hidden');
-            }
-
         })
-    })
 
 
-    function oncaptureFinish(result) {
-        result.forEach(function (item) {
-            if (item.type == "video") {
-                videoblob = item.blob;
-                var videobase64 = window.URL.createObjectURL(videoblob);
-                document.getElementById('m-video-play').src = videobase64;
-            }
-        });
-    }
-
-    function setCountDownTime(time) {
-        countdownElement.innerHTML = time;
-        return time;
-    }
-
-
-    function startCountDown() {
-        if (timerInterval == null) {
-            functioncalltime = countdowntime;
-            var value = setCountDownTime(functioncalltime);
-            timerInterval = setInterval(function () {
-                var value = setCountDownTime(--functioncalltime);
-                if (value == 0) {
-                    clearInterval(timerInterval);
-                    virec.stopCapture(oncaptureFinish);
+        function oncaptureFinish(result) {
+            result.forEach(function (item) {
+                if (item.type == "video") {
+                    videoblob = item.blob;
+                    var videobase64 = window.URL.createObjectURL(videoblob);
+                    document.getElementById('m-video-play').src = videobase64;
                 }
-            }, 1000);
+            });
         }
-    }
 
-    function stopCountDown() {
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
+        function setCountDownTime(time) {
+            $('#countdown').html(time);
+            return time;
         }
-    }
-    </script>
 
 
-</div>
+        function startCountDown() {
+            if (timerInterval == null) {
+                functioncalltime = countdowntime;
+                var value = setCountDownTime(functioncalltime);
+                timerInterval = setInterval(function () {
+                    var value = setCountDownTime(--functioncalltime);
+                    if (value == 0) {
+                        clearInterval(timerInterval);
+                        virec.stopCapture(oncaptureFinish);
+                    }
+                }, 1000);
+            }
+        }
 
+        function stopCountDown() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
 
+    })
+</script>
