@@ -178,7 +178,7 @@
                         CKEDITOR.instances.JobTopicEditor.setData(wholeval);
 
                         if (virec) {
-                            virec.clearRecording();
+                            //virec.clearRecording();
                             MyVideoRecord.StopTheCountDown();
                         }
 
@@ -186,6 +186,7 @@
                         $('#m-video-record').removeClass('hidden');
                         $('#m-video-play').addClass('hidden');
                         $('#m-video-play').attr('src', '');
+                        $('#m-video-record').attr('src', '');
                         MyVideoRecord.SetViRec(null);
                         $('#modal-video').modal('hide');
                     });

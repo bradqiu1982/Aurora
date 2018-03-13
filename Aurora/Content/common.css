@@ -671,6 +671,7 @@ div[MYTP="orange"] {
     border-left-style: solid;
     border-left-color: #FF7400 !important;
     border-left-width: 3px !important;
+    font-size:24px;
 }
 .br-panel-heading {
     padding: 0;
