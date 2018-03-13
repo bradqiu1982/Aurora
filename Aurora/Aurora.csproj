@@ -609,6 +609,7 @@
     <Content Include="Content\bootstrapfileinput.css" />
     <Content Include="Content\common.css" />
     <Content Include="Content\images\add_column.png" />
+    <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\end.png" />
     <Content Include="Content\images\export.png" />
     <Content Include="Content\images\import.png" />

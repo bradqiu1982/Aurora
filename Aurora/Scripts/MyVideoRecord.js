@@ -53,6 +53,7 @@
             $(".mc-end").addClass('hidden');
             $(".mc-play").addClass('hidden');
             $(".mc-start").removeClass('hidden');
+            $(".m-video-loading").addClass('hidden');
 
             $('#modal-video').modal({ backdrop: 'static' });
 

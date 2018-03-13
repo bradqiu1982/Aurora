@@ -328,6 +328,9 @@
 
         $(function () {
             $('body').on('click', '.m-video-upload', function () {
+
+                $(".m-video-loading").removeClass('hidden');
+
                 var videoblob = MyVideoRecord.GetVideoBlob();
                 var virec = MyVideoRecord.GetViRec();
 
