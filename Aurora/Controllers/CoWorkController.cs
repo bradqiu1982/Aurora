@@ -468,7 +468,7 @@ namespace Aurora.Controllers
             return ret;
         }
 
-        public JsonResult UploadVideoData()
+        public JsonResult UploadWebmVideoData()
         {
             foreach (string fl in Request.Files)
             {
