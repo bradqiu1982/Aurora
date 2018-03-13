@@ -1,4 +1,13 @@
-﻿
+﻿.btn-video {
+    background-color:white;
+    border:1px solid #ccc;
+    padding:3px;
+}
+
+.btn-video:hover {
+    background-color:#efefef;
+}
+
 .m-video-header{
     position: fixed;
     right: 5px;
