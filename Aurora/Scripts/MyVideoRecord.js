@@ -1,7 +1,7 @@
 ﻿var MyVideoRecord = function () {
         var virec = null;
         var videoblob = null;
-        var countdowntime = 60;
+        var countdowntime = 180;
         var functioncalltime = 0;
         var timerInterval = null;
 
