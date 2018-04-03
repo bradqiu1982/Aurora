@@ -18,7 +18,7 @@ public class ImageUpload : IHttpHandler {
 
             var ext = Path.GetExtension(tempfn).ToLower();
             var allitype = ".jpg,.png,.gif,.jpeg";
-            var allvtype = ".mp4,.mp3,.h264,.wmv,.wav,.avi,.flv,.mov,.mkv,.webm,.ogg";
+            var allvtype = ".mp4,.mp3,.h264,.wmv,.wav,.avi,.flv,.mov,.mkv,.webm,.ogg,.mov,.mpg";
 
             if (allitype.Contains(ext))
             {

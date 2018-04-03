@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using Aurora.Models;
 using System.Web.Routing;
 using System.IO;
+using System.Threading.Tasks;
+using RestSharp;
 
 namespace Aurora.Controllers
 {
@@ -131,6 +133,20 @@ namespace Aurora.Controllers
 
             return View();
         }
+
+        //private void PostMyRequest()
+        //{
+        //    var cates = new string[] { "Jan", "Feb", "Mar" };
+        //    var data = new double[] { 29.9, 71.5, 106.4 };
+        //    var cateobj = new { categories = cates };
+        //    var dataobj = new { data = data };
+        //    var dataarrayobj = new object[] { dataobj };
+        //    var option = new {
+        //        xAxis = cateobj,
+        //        series = dataarrayobj
+        //    };
+        //    HighChartsByNode.GenerateHighChart(this, option);
+        //}
 
         public ActionResult Welcome()
         {
