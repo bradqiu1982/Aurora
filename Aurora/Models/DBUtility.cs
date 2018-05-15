@@ -43,15 +43,13 @@ namespace Aurora.Models
             {
                 if (IsDebug())
                 {
-                    conn.ConnectionString = "Server=wux-d80008792;User ID=dbg;Password=dbgpwd;Database=DebugDB;Connection Timeout=120;";
+                    conn.ConnectionString = "Server=wuxinpi;User ID=AuroraTrace;Password=abc@123;Database=AuroraDB;Connection Timeout=120;";
                 }
                 else
                 {
-                    conn.ConnectionString = "Server=wuxinpi;User ID=NebulaNPI;Password=abc@123;Database=NebulaTrace;Connection Timeout=120;";
+                    conn.ConnectionString = "Server=wuxinpi;User ID=AuroraTrace;Password=abc@123;Database=AuroraDB;Connection Timeout=120;";
                 }
 
-                //conn.ConnectionString = "Data Source = (LocalDb)\\MSSQLLocalDB; AttachDbFilename = ~\\App_Data\\Nebula.mdf; Integrated Security = True";
-                //conn.ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + Path.Combine(HttpRuntime.AppDomainAppPath, "App_Data\\Nebula.mdf") + ";Integrated Security=True;";
                 conn.Open();
                 return conn;
             }

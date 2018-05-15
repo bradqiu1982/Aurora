@@ -219,7 +219,6 @@ div[MYTP="orange"] {
     display: inline-block;
     width: 25%;
     height: 100%;
-    overflow-y: auto;
 }
 
 .item-panel-active{

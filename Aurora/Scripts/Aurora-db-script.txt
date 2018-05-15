@@ -27,7 +27,7 @@ CREATE TABLE [dbo].[auroratopicpeople] (
     [topicid]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
     [people]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
 	[IsRead]   NVARCHAR (200)   DEFAULT ('')  NOT NULL,
-	[owner]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
+	[isowner]   NVARCHAR (200)   DEFAULT ('')  NOT NULL
 );
 
 
@@ -80,3 +80,16 @@ CREATE TABLE [dbo].[technicalvideo] (
 	[videopath]   NVARCHAR (MAX)   DEFAULT ('')  NOT NULL,
 	[updatedate]   DATETIME DEFAULT ('1982-05-06 10:00:00') NOT NULL
 );
+
+
+delete from auroranewpeople;
+delete from auroranewpj;
+delete from auroratopicduedate;
+delete from auroratopicevent;
+delete from auroratopicpeople;
+delete from auroratopicpj;
+delete from aurorausermap;
+delete from CoTopicVM;
+delete from technicalvideo;
+delete from TopicCommentVM;
+delete from UserCustomizeTheme;

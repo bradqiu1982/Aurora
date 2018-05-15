@@ -156,7 +156,7 @@ namespace Aurora.Controllers
         public JsonResult UpdateMachineUserName()
         {
             UserAuth();
-            var username = Request.Form["username"].ToUpper().Trim();
+            var username = Request.Form["username"].ToUpper().Trim().Replace("@FINISAR.COM","");
             MachineUserMap.UpdateMachineUserMap(ViewBag.compName, username);
             var ret = new JsonResult();
             ret.Data = new { sucess = true };

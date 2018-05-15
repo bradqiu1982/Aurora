@@ -157,6 +157,119 @@
         })
     };
 
+    var modifypage = function () {
+        $('body').on('click', '.maineditor-time', function () {
+            $('#mainduedatemodal').modal({ backdrop: 'static' });
+        })
+
+        $('body').on('click', '.maineditor-people', function () {
+            $('#relatedmodal').modal({ backdrop: 'static' });
+        })
+
+        $('body').on('click', '.maineditor-proj', function () {
+            $('#add-event-modal').modal({ backdrop: 'static' });
+        })
+
+        $('body').on('click', '#m-addevent', function () {
+            $('#add-event-modal').modal('hide');
+            var eventcontent = '';
+            $('.event-content').each(function () {
+                eventcontent = eventcontent + '<p>#' + $(this).html() + '</p>';
+            });
+            if (eventcontent) {
+                var wholeval = CKEDITOR.instances.JobTopicEditor.getData() + eventcontent;
+                CKEDITOR.instances.JobTopicEditor.setData(wholeval);
+            }
+
+        })
+
+        function submitduedate() {
+            var topicid = $('#topicid').val();
+            var duedate = $('#duedate').val();
+            var warningclock = '';
+            if ($('input[name=warning-clock]:checked').val()) {
+                warningclock = $('input[name=warning-clock]:checked').val();
+            }
+
+            if (duedate || warningclock) {
+                $.post('/CoWork/NewTopicDueDate',
+                    {
+                        topicid: topicid,
+                        duedate: duedate,
+                        warningclock: warningclock
+                    },
+                    function (output) { });
+            }
+        }
+
+        function submitpeople() {
+            var topicid = $('#topicid').val();
+            var pps = $('#towhoinput1').val();
+            if (pps) {
+                $.post('/CoWork/NewTopicPeople',
+                    {
+                        topicid: topicid,
+                        pps: pps
+                    },
+                    function (output) { });
+            }
+        }
+
+        function submitevent() {
+            var topicid = $('#topicid').val();
+            var eventcontents = new Array();
+            $('.event-content').each(function () {
+                eventcontents.push($(this).html());
+            });
+
+            if (eventcontents.length != 0) {
+                $.post('/CoWork/NewTopicEvent',
+                    {
+                        topicid: topicid,
+                        eventcontents: JSON.stringify(eventcontents)
+                    },
+                    function (output) { });
+            }
+        }
+
+        //$('body').on('click', '#topiceditorsubmit', function () {
+        //    var subject = $('#subject').val();
+        //    var content = CKEDITOR.instances.JobTopicEditor.getData();
+        //    if (subject && content) {
+        //        submitduedate();
+        //        submitpeople();
+        //        submitevent();
+
+        //        $('#topiceditorform').submit();
+        //    }
+        //    else {
+        //        alert("topic subject or topic content should not be empty!")
+        //        return false;
+        //    }
+        //})
+
+        $('body').on('click', '.logo', function () {
+            window.location.href = '/CoWork/Home';
+        })
+
+        $('body').on('click', '.home-event-item,.SetEventStatusMenu', function () {
+            var topicid = $(this).attr('topicid');
+            $('#demoparent').empty();
+            $('#demoparent').append('<div id="todo-lists-basic-demo"></div>');
+            $('#todo-lists-basic-demo').lobiList({
+                actions: {
+                    load: '/CoWork/InitEventList?topicid=' + topicid,
+                    move: '/CoWork/MoveEventList'
+                },
+                enableTodoRemove: false,
+                enableTodoEdit: false,
+                controls: []
+            });
+            $('#eventlistmodal').modal({ backdrop: 'static' });
+        })
+
+    };
+
     var mainpage = function () {
 
         $('body').on('mouseenter', '.search-topic', function () {
@@ -310,6 +423,10 @@
         createpageinit: function ()
         {
             createpage();
+        },
+        modifypageinit: function ()
+        {
+            modifypage();
         },
         mainpageinit:function()
         {
